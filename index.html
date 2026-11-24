@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сленг поколения Z — словарь-переводчик</title>
+    
+    <!-- Подключение шрифтов Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ОЧЕНЬ ТЕМНАЯ И ГЛУБОКАЯ ЦВЕТОВАЯ ПАЛИТРА (Dark Mocha) */
+        :root {
+            --bg: #1a1817; 
+            --text: #e2dfdd; 
+            --heading: #ffffff; 
+            
+            --card-bg: rgba(35, 32, 30, 0.7); 
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            
+            --accent-1: #e8705c; /* Терракота */
+            --accent-2: #7cbf9c; /* Шалфейный */
+            --accent-3: #c4a68a; /* Латте */
+            
+            --muted: #9a9590;
+            --modal-bg: rgba(30, 27, 25, 0.98);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-1); }
+
+        body {
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            background-color: var(--bg); color: var(--text);
+            line-height: 1.6; overflow-x: hidden;
+        }
+
+        /* Анимированный фон */
+        .bg-blobs { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; background: radial-gradient(circle at 50% 50%, #221f1d 0%, #121110 100%); }
+        .blob { position: absolute; border-radius: 50%; filter: blur(150px); opacity: 0.3; animation: float 35s infinite alternate ease-in-out; }
+        .blob-1 { width: 600px; height: 600px; background: var(--accent-2); top: -15%; left: -10%; }
+        .blob-2 { width: 700px; height: 700px; background: var(--accent-1); bottom: -20%; right: -15%; animation-delay: -10s; }
+        .blob-3 { width: 500px; height: 500px; background: var(--accent-3); top: 40%; left: 35%; animation-delay: -20s; opacity: 0.15; }
+
+        @keyframes float { 0% { transform: translate(0, 0) scale(1) rotate(0deg); } 100% { transform: translate(80px, 60px) scale(1.1) rotate(10deg); } }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+
+        h1, h2, h3, .logo, .key-stat-card h4 { font-family: 'Montserrat', sans-serif; }
+
+        /* Анимация появления при скролле */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Кнопка наверх */
+        #backToTop {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background: var(--accent-1); color: white; border: none; border-radius: 50%;
+            font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 15px rgba(232, 112, 92, 0.4);
+            display: none; z-index: 999; transition: 0.3s; align-items: center; justify-content: center;
+        }
+        #backToTop:hover { transform: translateY(-5px); background: var(--accent-2); }
+
+        /* НАВИГАЦИЯ (Топбар) */
+        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; margin-bottom: 20px; background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; box-shadow: var(--card-shadow); position: sticky; top: 20px; z-index: 100; }
+        .logo { font-size: 1.4rem; font-weight: 900; color: var(--heading); letter-spacing: 2px; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--accent-1); }
+
+        /* Главный экран */
+        .hero { text-align: center; padding: 60px 0 40px; }
+        .badge { display: inline-block; padding: 6px 16px; border-radius: 30px; background: rgba(124, 191, 156, 0.1); color: var(--accent-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(124, 191, 156, 0.2); }
+        .hero h2 { font-size: 3.2rem; margin-bottom: 15px; color: var(--heading); font-weight: 900; line-height: 1.2; }
+        .typed-text { color: var(--accent-1); border-right: 4px solid var(--accent-1); padding-right: 8px; animation: blink 0.8s infinite; }
+        @keyframes blink { 50% { border-color: transparent; } }
+        .hero p { font-size: 1.15rem; color: var(--muted); max-width: 600px; margin: 0 auto; }
+
+        /* Бегущая строка */
+        .marquee-container { width: 100%; overflow: hidden; background: var(--accent-1); color: var(--heading); padding: 12px 0; border-radius: 15px; margin-bottom: 40px; display: flex; box-shadow: 0 5px 15px rgba(232, 112, 92, 0.2); }
+        .marquee-content { display: flex; gap: 40px; white-space: nowrap; animation: scroll 25s linear infinite; font-weight: 700; letter-spacing: 1px; font-size: 1rem; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Слово дня */
+        .word-of-day {
+            background: linear-gradient(135deg, rgba(232, 112, 92, 0.15), rgba(124, 191, 156, 0.15));
+            border: 1px solid var(--accent-1); border-radius: 20px; padding: 30px;
+            text-align: center; margin-bottom: 40px; box-shadow: var(--card-shadow);
+        }
+        .word-of-day h3 { font-size: 1.2rem; color: var(--accent-3); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        .word-of-day .big-word { font-size: 2.5rem; font-weight: 900; color: var(--heading); margin-bottom: 15px; }
+        .word-of-day button {
+            background: var(--accent-1); color: white; border: none; padding: 10px 25px;
+            border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .word-of-day button:hover { background: var(--accent-2); }
+
+        /* Ключевые цифры */
+        .key-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 50px; }
+        .key-stat-card { background: var(--card-bg); backdrop-filter: blur(10px); padding: 25px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); text-align: center; }
+        .key-stat-card h4 { font-size: 2.2rem; color: var(--accent-2); font-weight: 900; margin-bottom: 5px; }
+        .key-stat-card p { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
+
+        /* Поиск и фильтры */
+        .controls { margin-bottom: 35px; display: flex; flex-direction: column; gap: 15px; }
+        .search-box input { width: 100%; padding: 16px 25px; font-size: 1.05rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; color: var(--heading); backdrop-filter: blur(10px); transition: all 0.3s; outline: none; box-shadow: var(--card-shadow); }
+        .search-box input::placeholder { color: var(--muted); }
+        .search-box input:focus { border-color: var(--accent-1); box-shadow: 0 0 20px rgba(232, 112, 92, 0.2); }
+        .filters { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--muted); padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); font-size: 0.9rem; box-shadow: var(--card-shadow); }
+        .filter-btn:hover, .filter-btn.active { background: var(--accent-2); border-color: var(--accent-2); color: var(--bg); font-weight: 700; }
+
+        /* Сетка карточек */
+        .dictionary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 80px; perspective: 1000px; }
+        .card { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--card-border); border-radius: 20px; padding: 25px 20px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.1s ease, box-shadow 0.3s ease, border-color 0.3s; transform-style: preserve-3d; box-shadow: var(--card-shadow); }
+        .card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); transition: 0.5s; pointer-events: none; }
+        .card:hover::before { left: 150%; }
+        .card:hover { border-color: var(--accent-1); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); }
+        .card .word { font-family: 'Montserrat', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--heading); margin-bottom: 8px; transform: translateZ(20px); }
+        .card .translation { font-size: 0.95rem; color: var(--accent-3); font-weight: 500; transform: translateZ(15px); }
+
+        /* Заголовки секций */
+        .section-title { font-size: 2rem; margin: 60px 0 30px; text-align: center; color: var(--heading); font-weight: 800; }
+
+        /* Мост или Стена */
+        .bridge-wall { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 40px; }
+        .bw-card { background: var(--card-bg); backdrop-filter: blur(10px); padding: 35px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); transition: 0.3s; }
+        .bw-card:hover { transform: translateY(-5px); }
+        .bw-card.bridge { border-top: 5px solid var(--accent-2); }
+        .bw-card.wall { border-top: 5px solid var(--accent-1); }
+        .bw-card h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--heading); display: flex; align-items: center; gap: 10px; }
+        .bw-card p { font-size: 1rem; color: var(--text); }
+
+        /* Сравнение поколений */
+        .generations-table {
+            width: 100%; border-collapse: collapse; background: var(--card-bg);
+            border-radius: 20px; overflow: hidden; backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 40px;
+        }
+        .generations-table th, .generations-table td {
+            padding: 15px 20px; text-align: left; border-bottom: 1px solid var(--card-border);
+        }
+        .generations-table th { background: rgba(255,255,255,0.05); color: var(--heading); font-family: 'Montserrat'; font-weight: 800; }
+        .generations-table td { color: var(--text); font-size: 0.95rem; }
+        .generations-table tr:last-child td { border-bottom: none; }
+        .generations-table .highlight { color: var(--accent-2); font-weight: 700; }
+
+        /* Мини-квиз (ОБНОВЛЕННЫЙ) */
+        .mini-quiz { background: var(--card-bg); border-radius: 20px; padding: 30px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 40px; }
+        .quiz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .quiz-q { margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; color: var(--heading); font-size: 1rem; }
+        .quiz-btns { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text); padding: 8px 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; text-align: left; }
+        .quiz-btn:hover { border-color: var(--accent-3); background: rgba(255,255,255,0.1); }
+        .quiz-btn.correct { background: var(--accent-2); color: var(--bg); border-color: var(--accent-2); font-weight: bold; }
+        .quiz-btn.wrong { background: var(--accent-1); color: white; border-color: var(--accent-1); }
+        .quiz-result-text { display: none; margin-top: 8px; font-weight: bold; font-size: 0.85rem; }
+        .quiz-result-text.show { display: block; }
+
+        /* Статистика */
+        .survey-block { background: var(--card-bg); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid var(--card-border); margin-bottom: 30px; box-shadow: var(--card-shadow); }
+        .stat-row { margin-bottom: 25px; }
+        .stat-label { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; color: var(--heading); }
+        .stat-bar { height: 18px; background: rgba(0,0,0,0.4); border-radius: 10px; overflow: hidden; }
+        .stat-fill { height: 100%; border-radius: 10px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .stat-fill.young { background: var(--accent-2); }
+        .stat-fill.millennial { background: var(--accent-3); }
+        .stat-fill.older { background: var(--accent-1); }
+
+        /* Встроенная Google Forms */
+        .quiz-container { background: var(--card-bg); backdrop-filter: blur(10px); padding: 20px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); overflow: hidden; }
+        .quiz-container iframe { border-radius: 12px; background: white; display: block; }
+
+        /* Источники */
+        .sources-block { background: var(--card-bg); backdrop-filter: blur(10px); padding: 35px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
+        .sources-list { padding-left: 20px; }
+        .sources-list li { margin-bottom: 15px; font-size: 0.95rem; color: var(--text); }
+        .sources-list a { color: var(--accent-3); text-decoration: none; border-bottom: 1px dashed var(--accent-1); transition: 0.2s; font-weight: 500; }
+        .sources-list a:hover { color: var(--accent-1); border-bottom-style: solid; }
+
+        /* Футер */
+        .footer { text-align: center; padding: 40px 0 20px; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--card-border); margin-top: 60px; }
+
+        /* Модальное окно (3D Анимация) */
+        .modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); 
+            z-index: 1000; justify-content: center; align-items: center; 
+            padding: 20px; opacity: 0; transition: opacity 0.3s ease; 
+            perspective: 1200px;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal { 
+            background: var(--modal-bg); border: 1px solid var(--card-border); 
+            border-radius: 24px; max-width: 600px; width: 100%; padding: 40px; 
+            position: relative; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); 
+            transform: rotateX(-20deg) translateY(50px) scale(0.9);
+            opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .modal-overlay.active .modal { 
+            transform: rotateX(0deg) translateY(0) scale(1);
+            opacity: 1;
+        }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--muted); font-size: 2rem; cursor: pointer; transition: 0.2s; line-height: 1; }
+        .modal-close:hover { color: var(--accent-1); transform: rotate(90deg); }
+        .modal .word { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: var(--heading); margin-bottom: 25px; font-weight: 900; }
+        .field { margin-bottom: 20px; }
+        .field-label { font-size: 0.8rem; color: var(--accent-2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: 800; }
+        .field-value { font-size: 1.05rem; color: var(--text); }
+        .modal .example-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border-left: 4px solid var(--accent-2); font-style: italic; }
+        .modal .comment-box { background: rgba(232, 112, 92, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(232, 112, 92, 0.2); }
+        .source-meta { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--card-border); font-size: 0.85rem; color: var(--muted); text-align: right; }
+
+        /* Медиа-запросы */
+        @media (max-width: 768px) {
+            .hero h2 { font-size: 2.2rem; }
+            .key-stats { grid-template-columns: 1fr; }
+            .dictionary-grid { grid-template-columns: 1fr 1fr; }
+            .bridge-wall { grid-template-columns: 1fr; }
+            .quiz-grid { grid-template-columns: 1fr; }
+            .modal { padding: 30px 20px; }
+            .nav-links { display: none; }
+            .generations-table th, .generations-table td { padding: 10px; font-size: 0.85rem; }
+        }
+        @media (max-width: 480px) { .dictionary-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<!-- Анимированный фон -->
+<div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+<button id="backToTop" title="Наверх">↑</button>
+
+<div class="container">
+    <!-- Навигация -->
+    <header class="topbar">
+        <div class="logo">Z-СЛЕНГ</div>
+        <nav class="nav-links">
+            <a href="#dictionary">Словарь</a>
+            <a href="#compare">Поколения</a>
+            <a href="#test">Тест</a>
+            <a href="#stats">Статистика</a>
+            <a href="#survey">Опрос</a>
+        </nav>
+    </header>
+
+    <!-- Главный экран -->
+    <section class="hero reveal">
+        <div class="badge">Проектно-исследовательская работа</div>
+        <h2>Сленг поколения Z:<br><span class="typed-text" id="typedText"></span></h2>
+        <p>Исследование того, как язык цифрового поколения помогает нам сближаться или создает барьеры.</p>
+    </section>
+
+    <!-- Бегущая строка -->
+    <div class="marquee-container reveal">
+        <div class="marquee-content">
+            <span>ЗУМЕР • СЛОНЯРА • ВОЗДУХАН • ТРЕВОЖНИК • СКУФ • НОРМИС • ОМЕЖКА • ЧИНАЗЕС • КРИНЖ • ИМБА • СВАГА • ВАЙБ • БРЕЙНРОТ •</span>
+            <span>ЗУМЕР • СЛОНЯРА • ВОЗДУХАН • ТРЕВОЖНИК • СКУФ • НОРМИС • ОМЕЖКА • ЧИНАЗЕС • КРИНЖ • ИМБА • СВАГА • ВАЙБ • БРЕЙНРОТ •</span>
+        </div>
+    </div>
+
+    <!-- СЛОВО ДНЯ -->
+    <div class="word-of-day reveal">
+        <h3>Слово дня</h3>
+        <div class="big-word" id="wordOfDay">Загрузка...</div>
+        <button onclick="openModal(wordOfDayData)">Узнать значение</button>
+    </div>
+
+    <!-- Ключевые цифры -->
+    <div class="key-stats reveal">
+        <div class="key-stat-card">
+            <h4>150+</h4>
+            <p>Актуальных слов в словаре</p>
+        </div>
+        <div class="key-stat-card">
+            <h4>3</h4>
+            <p>Возрастные группы</p>
+        </div>
+        <div class="key-stat-card">
+            <h4>82%</h4>
+            <p>Зумеров используют сленг</p>
+        </div>
+    </div>
+
+    <!-- Управление словарем -->
+    <section class="controls reveal" id="dictionary">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Введите слово или значение для поиска...">
+        </div>
+        <div class="filters" id="filters">
+            <button class="filter-btn active" data-category="all">Все</button>
+            <button class="filter-btn" data-category="Англицизмы">Англицизмы</button>
+            <button class="filter-btn" data-category="Игровой сленг">Игровой сленг</button>
+            <button class="filter-btn" data-category="Мемы">Мемы</button>
+            <button class="filter-btn" data-category="Соцсети">Соцсети</button>
+            <button class="filter-btn" data-category="Эмоции / оценка">Эмоции</button>
+            <button class="filter-btn" data-category="Молодёжные словечки">Словечки</button>
+            <button class="filter-btn" data-category="Русский сленг">Русский сленг</button>
+            <button class="filter-btn" data-category="Неологизмы 2025">Неологизмы 2025</button>
+        </div>
+    </section>
+
+    <!-- Словарь -->
+    <main class="dictionary-grid" id="dictionaryGrid"></main>
+
+    <!-- СРАВНЕНИЕ ПОКОЛЕНИЙ -->
+    <h2 class="section-title reveal" id="compare">⏳ Сравнение поколений</h2>
+    <table class="generations-table reveal">
+        <thead>
+            <tr>
+                <th>Смысл</th>
+                <th>2000-е (Миллениалы)</th>
+                <th>2010-е (Поколение Z)</th>
+                <th>2020-е (Зумеры / Альфа)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Круто, отлично</td>
+                <td>Клёво, зашибись</td>
+                <td>Топ, огонь</td>
+                <td class="highlight">Имба, чиназес, rizz</td>
+            </tr>
+            <tr>
+                <td>Смешно</td>
+                <td>Ржака, угар</td>
+                <td>Лол, рофл</td>
+                <td class="highlight">Ор, кек</td>
+            </tr>
+            <tr>
+                <td>Стыдно, неловко</td>
+                <td>Стыдоба</td>
+                <td>Кринж</td>
+                <td class="highlight">Крипжатина</td>
+            </tr>
+            <tr>
+                <td>Хвастаться</td>
+                <td>Понтоваться</td>
+                <td>Выпендриваться</td>
+                <td class="highlight">Флексить, могнуть</td>
+            </tr>
+            <tr>
+                <td>Человек, который много обещает</td>
+                <td>Пустозвон</td>
+                <td>Болтун</td>
+                <td class="highlight">Воздухан</td>
+            </tr>
+            <tr>
+                <td>Ложь</td>
+                <td>Гон, брехня</td>
+                <td>Фейк</td>
+                <td class="highlight">Cap (кэп)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ТЕСТ (ПРОВЕРЬ СЕБЯ) - 10 ВОПРОСОВ -->
+    <h2 class="section-title reveal" id="test">🧠 Проверь себя</h2>
+    <div class="mini-quiz reveal">
+        <div class="quiz-grid">
+            <!-- Вопрос 1 -->
+            <div class="quiz-q" id="q1">
+                <p>1. Что означает «Скуф»?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q1', false)">Крутой геймер</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q1', true)">Мужчина средних лет с консервативными взглядами</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q1', false)">Новый айфон</button>
+                </div>
+                <div class="quiz-result-text" id="res-q1"></div>
+            </div>
+            <!-- Вопрос 2 -->
+            <div class="quiz-q" id="q2">
+                <p>2. Что значит «Флексить»?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q2', false)">Грустить</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q2', true)">Хвастаться, демонстрировать успех</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q2', false)">Танцевать брейк-данс</button>
+                </div>
+                <div class="quiz-result-text" id="res-q2"></div>
+            </div>
+            <!-- Вопрос 3 -->
+            <div class="quiz-q" id="q3">
+                <p>3. «Я в тильте» — что это значит?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q3', true)">Состояние злости, упадка или апатии</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q3', false)">Человек влюбился</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q3', false)">Человек идет спать</button>
+                </div>
+                <div class="quiz-result-text" id="res-q3"></div>
+            </div>
+            <!-- Вопрос 4 -->
+            <div class="quiz-q" id="q4">
+                <p>4. Что значит «Cap»?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q4', false)">Кепка</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q4', true)">Ложь, преувеличение</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q4', false)">Крутой парень</button>
+                </div>
+                <div class="quiz-result-text" id="res-q4"></div>
+            </div>
+            <!-- Вопрос 5 -->
+            <div class="quiz-q" id="q5">
+                <p>5. Что такое «Краш»?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q5', true)">Человек, который очень нравится</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q5', false)">Авария, катастрофа</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q5', false)">Компьютерная игра</button>
+                </div>
+                <div class="quiz-result-text" id="res-q5"></div>
+            </div>
+            <!-- Вопрос 6 -->
+            <div class="quiz-q" id="q6">
+                <p>6. Кто такой «Нормис»?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q6', false)">Геймер высокого уровня</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q6', true)">Обычный, заурядный человек</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q6', false)">Новый блогер</button>
+                </div>
+                <div class="quiz-result-text" id="res-q6"></div>
+            </div>
+            <!-- Вопрос 7 -->
+            <div class="quiz-q" id="q7">
+                <p>7. Что значит «Брейнрот»?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q7', true)">Бессмысленный контент, разжижающий мозг</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q7', false)">Умный человек</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q7', false)">Заболевание мозга</button>
+                </div>
+                <div class="quiz-result-text" id="res-q7"></div>
+            </div>
+            <!-- Вопрос 8 -->
+            <div class="quiz-q" id="q8">
+                <p>8. Если человек «Агрится», что он делает?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q8', false)">Смеется</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q8', true)">Злится, раздражается</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q8', false)">Спит</button>
+                </div>
+                <div class="quiz-result-text" id="res-q8"></div>
+            </div>
+            <!-- Вопрос 9 -->
+            <div class="quiz-q" id="q9">
+                <p>9. Что значит «Слоп»?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q9', false)">Вкусная еда</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q9', true)">Контент низкого качества от ИИ</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q9', false)">Спортивный снаряд</button>
+                </div>
+                <div class="quiz-result-text" id="res-q9"></div>
+            </div>
+            <!-- Вопрос 10 -->
+            <div class="quiz-q" id="q10">
+                <p>10. Кто такой «Воздухан»?</p>
+                <div class="quiz-btns">
+                    <button class="quiz-btn" onclick="checkAnswer('q10', true)">Человек, который много обещает, но ничего не делает</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q10', false)">Воздушный шарик</button>
+                    <button class="quiz-btn" onclick="checkAnswer('q10', false)">Аквалангист</button>
+                </div>
+                <div class="quiz-result-text" id="res-q10"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Статистика -->
+    <h2 class="section-title reveal" id="stats">📊 Данные исследования</h2>
+    <section class="survey-block reveal">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <p style="font-size: 1rem; color: var(--text); max-width: 700px; margin: 0 auto; font-weight: 500;">
+                Показатели основаны на данных <strong>Brand Analytics</strong> (анализ 90+ млн публикаций) и всероссийском опросе <strong>«Дзен» (Inc. Russia, Lenta.ru, Gazeta.ru)</strong>.
+            </p>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-label">
+                <span>14–25 лет (Активно используют) <a href="https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml" target="_blank" style="text-decoration: none; font-size: 0.8rem; color: var(--bg); background: var(--accent-2); padding: 3px 8px; border-radius: 10px; margin-left: 8px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>82%</span>
+            </div>
+            <div class="stat-bar"><div class="stat-fill young" style="width: 82%;"></div></div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-label">
+                <span>26–35 лет (Знают и используют) <a href="https://lenta.ru/news/2024/09/18/nazvan-samyy-razdrazhayuschiy-millenialov-i-zumerov-sleng/" target="_blank" style="text-decoration: none; font-size: 0.8rem; color: var(--bg); background: var(--accent-3); padding: 3px 8px; border-radius: 10px; margin-left: 8px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>31%</span>
+            </div>
+            <div class="stat-bar"><div class="stat-fill millennial" style="width: 31%;"></div></div>
+        </div>
+        
+        <div class="stat-row">
+            <div class="stat-label">
+                <span>36–45 лет (Уверены в знании) <a href="https://incrussia.ru/news/kak-rossiyane-ponimayut-internet-sleng-i-kak-na-nem-razgovarivayut-v-zavisimosti-ot-vozrasta/" target="_blank" style="text-decoration: none; font-size: 0.8rem; color: var(--heading); background: var(--accent-1); padding: 3px 8px; border-radius: 10px; margin-left: 8px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>3%</span>
+            </div>
+            <div class="stat-bar"><div class="stat-fill older" style="width: 3%;"></div></div>
+        </div>
+
+        <p style="font-size: 1.1rem; color: var(--heading); font-weight: 800; margin-top: 30px; text-align: center;">
+            Итог: чем старше поколение, тем выше «стена» непонимания. Словарь-переводчик помогает ее разрушить.
+        </p>
+    </section>
+
+    <!-- Опрос (Google Forms) -->
+    <h2 class="section-title reveal" id="survey">🗳 Пройди опрос</h2>
+    <section class="quiz-container reveal">
+        <iframe 
+            src="https://docs.google.com/forms/d/e/1FAIpQLSdqfLZEitZu2fH-Ep-IS1Ptr_XNWGk2OLR_v6QN4KyCCgDxbQ/viewform?embedded=true" 
+            width="100%" 
+            height="900" 
+            frameborder="0" 
+            marginheight="0" 
+            marginwidth="0">
+            Загрузка…
+        </iframe>
+    </section>
+
+    <!-- Источники -->
+    <h2 class="section-title reveal" id="sources">📚 Источники</h2>
+    <section class="sources-block reveal">
+        <ol class="sources-list">
+            <li>Brand Analytics. Словарь сленга 2025. — <a href="https://brandanalytics.ru/blog/brand-analytics-slang-mem" target="_blank">Ссылка</a></li>
+            <li>Inc. Russia: Как россияне понимают интернет-сленг (2024). — <a href="https://incrussia.ru/news/kak-rossiyane-ponimayut-internet-sleng-i-kak-na-nem-razgovarivayut-v-zavisimosti-ot-vozrasta/" target="_blank">Ссылка</a></li>
+            <li>Lenta.ru: Самый раздражающий сленг (2024). — <a href="https://lenta.ru/news/2024/09/18/nazvan-samyy-razdrazhayuschiy-millenialov-i-zumerov-sleng/" target="_blank">Ссылка</a></li>
+            <li>Gazeta.ru: Аналитики выяснили, какие неологизмы чаще всего используют россияне (2024). — <a href="https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml" target="_blank">Ссылка</a></li>
+            <li>РИАМО: От «нейрослопа» до «фарма ауры»: полный гид по новому зумерскому сленгу (2026). — <a href="https://riamo.ru/articles/shpargalki/ot-nejroslopa-do-farma-aury-polnyj-gid-po-novomu-zumerskomu-slengu/" target="_blank">Ссылка</a></li>
+            <li>НТВ: «Дофаминовый», «иишка» и «воздухан» претендуют на звание «Слово года — 2026». — <a href="https://www.ntv.ru/novosti/3020254" target="_blank">Ссылка</a></li>
+            <li>Медиалогия: Имба, окак, Лабубу вошли в топ-5 слов 2025 года. — <a href="https://www.mn.ru/short/imba-okak-labubu-voshli-v-top-5-slov-2025-goda-po-versii-medialogii" target="_blank">Ссылка</a></li>
+            <li>LiveDune / RTVI: Названы самые популярные сленговые слова 2025 года. — <a href="https://rtvi.com/news/nazvany-samye-populyarnye-slengovye-slova-2025-goda/" target="_blank">Ссылка</a></li>
+            <li>Комсомольская правда: Что значит «чиназес», «омежка» и «санчас»? (2025). — <a href="https://www.kp.ru/daily/27654/5012345/" target="_blank">Ссылка</a></li>
+            <li>Тинькофф Журнал: Скуф, чиназес и краш: как понять поколение Z (2025). — <a href="https://journal.tinkoff.ru/slang/" target="_blank">Ссылка</a></li>
+            <li>Euronews: От «chud» до «bop»: самые популярные в Google сленговые слова поколения Альфа 2026 года. — <a href="https://ru.euronews.com/2026/09/28/from-chud-to-bop-most-searched-gen-alpha-slang-terms-of-2026-so-far-revealed" target="_blank">Ссылка</a></li>
+            <li>Парламентская газета: Ученые описали 90 новых слов, появившихся в русском языке в 2025 году. — <a href="https://www.pnp.ru/culture/uchenye-vyyavili-90-novykh-slov-poyavivshikhsya-v-russkom-yazyke-v-2025-godu.html" target="_blank">Ссылка</a></li>
+            <li>Кубань 24: «Лабубомания», «кофе-рейв» и еще 88 слов появились в русском языке в 2025 году. — <a href="https://kuban24.tv/item/labubomaniya-kofe-rejv-i-eshhe-88-slov-poyavilis-v-russkom-yazyke-v-2025-godu" target="_blank">Ссылка</a></li>
+            <li>URA.RU: Дофаминовый воздухан в прайме — это «ред-флаг»: россияне выбирают слово года 2026. — <a href="https://ura.news/articles/1053141920" target="_blank">Ссылка</a></li>
+            <li>Слова года по версиям ведущих словарей: 
+                <a href="https://blog.collinsdictionary.com/language-lovers/collins-word-of-the-year-2026-a-year-of-being-outdone/" target="_blank">Collins Dictionary (2026)</a>, 
+                <a href="https://www.bbc.com/news/articles/cewjxqvqzgyo" target="_blank">Oxford University Press (2025)</a>.
+            </li>
+            <li>5-tv.ru: «Мусор или величайшее достижение»: США назвали слово 2025 года (2026). — <a href="https://www.5-tv.ru/news/5051173/musor-ili-velicajsee-dostizenie-vssa-nazvali-slovo-2025-goda/" target="_blank">Ссылка</a></li>
+            <li>Справочный портал «Грамота.ру» (материалы о неологизмах). — <a href="https://gramota.ru/" target="_blank">Ссылка</a></li>
+        </ol>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <p>© 2026 Проектно-исследовательская работа «Слово в языке, культуре и жизни»</p>
+        <p>Сленг поколения Z: мост или стена?</p>
+    </footer>
+
+</div>
+
+<!-- Модальное окно -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <div class="word" id="modalWord"></div>
+        <div class="field">
+            <div class="field-label">Значение</div>
+            <div class="field-value" id="modalMeaning"></div>
+        </div>
+        <div class="field">
+            <div class="field-label">Пример употребления</div>
+            <div class="field-value example-box" id="modalExample"></div>
+        </div>
+        <div class="field">
+            <div class="field-label">Перевод</div>
+            <div class="field-value" style="color: var(--accent-2); font-weight: bold;" id="modalTranslation"></div>
+        </div>
+        <div class="field">
+            <div class="field-label">Комментарий</div>
+            <div class="field-value comment-box" id="modalComment"></div>
+        </div>
+        <div class="source-meta" id="modalSource"></div>
+    </div>
+</div>
+
+<script>
+    const dictionary = [
+        // --- 150 СЛОВ ---
+        { word: "Могнуть", meaning: "Превосходить кого-то, затмевать, выглядеть выигрышнее на чужом фоне.", example: "«Я тебя могну»", translation: "превосходить", comment: "Слово года Collins (2026).", category: "Англицизмы", source: "Collins Dictionary", date: "2026" },
+        { word: "Чоппельгангер", meaning: "Менее привлекательная копия человека.", example: "«Это же чоппельгангер Петрова»", translation: "некрасивый двойник", comment: "От doppelgänger и chopped.", category: "Мемы", source: "Интернет-мемы", date: "2025" },
+        { word: "Брейнрот", meaning: "Бессмысленный контент, разжижающий мозг.", example: "«Я час смотрел брейнрот»", translation: "бессмысленный контент", comment: "Слово года Oxford (2025).", category: "Соцсети", source: "Oxford", date: "2025" },
+        { word: "Имба", meaning: "Что-то очень крутое, сильное.", example: "«Этот трек — имба»", translation: "круто", comment: "Из геймерского сленга.", category: "Игровой сленг", source: "Brand Analytics", date: "2025" },
+        { word: "Мабой", meaning: "Парень, приятель.", example: "«Мабой, как дела?»", translation: "друг", comment: "От my boy.", category: "Англицизмы", source: "Английский сленг", date: "2025" },
+        { word: "Пэпэ", meaning: "Статус, крутость.", example: "«Он сегодня в пэпэ»", translation: "крутой", comment: "От лягушонка Пепе.", category: "Мемы", source: "Культура", date: "2025" },
+        { word: "Втфа", meaning: "Ругательство.", example: "«Втфа, опять забыл»", translation: "блин", comment: "Русифицированное wtf.", category: "Англицизмы", source: "Интернет-сленг", date: "2025" },
+        { word: "Делюлю", meaning: "Самообман.", example: "«Я в делюлю»", translation: "фантазия", comment: "От delusional.", category: "Англицизмы", source: "Соцсети", date: "2025" },
+        { word: "Лок-ин", meaning: "Сосредоточиться.", example: "«Всё, лок-ин»", translation: "собраться", comment: "Смена soft life.", category: "Англицизмы", source: "TikTok", date: "2025" },
+        { word: "Аура-фарминг", meaning: "Зарабатывание очков крутости.", example: "«Чистый аура-фарминг»", translation: "набор очков", comment: "От aura + farming.", category: "Соцсети", source: "TikTok", date: "2025" },
+        { word: "Рейджбейт", meaning: "Контент для вызова злости.", example: "«Этот пост — рейджбейт»", translation: "провокация", comment: "Слово года Oxford.", category: "Соцсети", source: "Oxford", date: "2025" },
+        { word: "Гивинг", meaning: "Выглядит как, передает атмосферу.", example: "«Это гивинг старые деньги»", translation: "выглядит как", comment: "От giving.", category: "Англицизмы", source: "TikTok", date: "2025" },
+        { word: "Клок-ит", meaning: "Замечать фальшь.", example: "«Я сразу клок-ит»", translation: "считывать", comment: "От clock it.", category: "Англицизмы", source: "TikTok", date: "2025" },
+        { word: "Слоп", meaning: "Контент низкого качества от ИИ.", example: "«Не читай этот слоп»", translation: "мусор", comment: "Слово года Merriam-Webster.", category: "Соцсети", source: "Merriam-Webster", date: "2026" },
+        { word: "Гятт", meaning: "Восхищение.", example: "«Гятт, вот это форма!»", translation: "вау", comment: "Из английского сленга.", category: "Англицизмы", source: "Английский сленг", date: "2025" },
+        { word: "Бассин", meaning: "Очень вкусный.", example: "«Этот бургер — бассин»", translation: "вкусно", comment: "От bussin.", category: "Англицизмы", source: "Английский сленг", date: "2025" },
+        { word: "Кланкер", meaning: "Пренебрежительное название робота.", example: "«Тупой кланкер»", translation: "робот", comment: "Из фантастики.", category: "Мемы", source: "Соцсети", date: "2025" },
+        { word: "Чекать", meaning: "Проверять.", example: "«Чекни чат»", translation: "проверить", comment: "От check.", category: "Англицизмы", source: "Brand Analytics", date: "2025" },
+        { word: "Нейрослоп", meaning: "Бессмысленный контент, который выглядит так, будто его сгенерировала нейросеть.", example: "«Я отписался от него, один нейрослоп»", translation: "ИИ-мусор", comment: "Новое слово 2026 года.", category: "Соцсети", source: "РИАМО", date: "2026" },
+        { word: "Завоз", meaning: "Приукрашивание истории ради того, чтобы она была смешнее.", example: "«Я немного завез в этом ролике»", translation: "приукрасить", comment: "Сленг блогеров.", category: "Соцсети", source: "РИАМО", date: "2026" },
+        { word: "Лор", meaning: "Предыстория, скрытые детали или контекст чего-либо.", example: "«Он дропнул кринжовый лор»", translation: "предыстория", comment: "Из игровой культуры.", category: "Игровой сленг", source: "РИАМО", date: "2026" },
+        { word: "Залончить", meaning: "Сфокусироваться на чём-то.", example: "«Пора залончить работу»", translation: "сфокусироваться", comment: "От lock in.", category: "Англицизмы", source: "РИАМО", date: "2026" },
+        { word: "Вайбкодинг", meaning: "Написание кода с помощью ИИ.", example: "«Я вайбкодю и надеюсь»", translation: "кодить с ИИ", comment: "Слово года Collins 2025.", category: "Англицизмы", source: "Collins Dictionary", date: "2025" },
+        { word: "6-7", meaning: "Бессмысленная фраза или означающая «так себе».", example: "«Твой трек — это 6-7»", translation: "так себе", comment: "Сленг поколения Альфа.", category: "Мемы", source: "MK.ru", date: "2025" },
+        { word: "Скибиди", meaning: "Бессмысленное слово, может значить «круто» или «плохо».", example: "«Этот сет был очень скибиди»", translation: "неоднозначно", comment: "Из мемов.", category: "Мемы", source: "New Indian Express", date: "2025" },
+        { word: "Зумер", meaning: "Представитель поколения Z.", example: "«Современные зумеры не понимают дискеты»", translation: "поколение Z", comment: "Слово года 2025 по версии «Грамоты.ру».", category: "Русский сленг", source: "Грамота.ру", date: "2025" },
+        { word: "Слоняра", meaning: "Крутой, успешный, надежный человек.", example: "«Он мой слоняра, всегда выручит»", translation: "молодец, опора", comment: "Топ-слов 2025 по Медиалогии.", category: "Русский сленг", source: "Медиалогия", date: "2025" },
+        { word: "Скуф", meaning: "Ироничный ярлык для мужчины средних лет с консервативными взглядами.", example: "«Типичный скуф в комментариях»", translation: "мужчина в возрасте", comment: "Популярное слово 2025 года.", category: "Русский сленг", source: "Комсомольская правда", date: "2025" },
+        { word: "Нормис", meaning: "Обычный, заурядный человек.", example: "«Он нормис, не понимает мемов»", translation: "обычный человек", comment: "Прочно вошло в русский сленг.", category: "Русский сленг", source: "Комсомольская правда", date: "2025" },
+        { word: "Нулевое свидание", meaning: "Короткая встреча (на 5–10 минут) для оценки человека.", example: "«Сходили на нулевое свидание»", translation: "пробная встреча", comment: "Новый термин в отношениях.", category: "Русский сленг", source: "Комсомольская правда", date: "2025" },
+        { word: "Пупупу", meaning: "Междометие, выражающее задумчивость или грусть.", example: "«Пупупу, не знаю, что и сказать»", translation: "хм, не знаю", comment: "Шорт-лист «Грамоты.ру» 2025.", category: "Мемы", source: "Грамота.ру", date: "2025" },
+        { word: "Окак", meaning: "Выражение удивления.", example: "«Окак, ты уже здесь?»", translation: "вот это да", comment: "Из мема с котом.", category: "Мемы", source: "Пруфы.ру", date: "2025" },
+        { word: "Бот", meaning: "Программа, имитирующая действия человека.", example: "«Ты бот или живой?»", translation: "робот, программа", comment: "Самое популярное сленговое слово 2025 года.", category: "Соцсети", source: "LiveDune / RTVI", date: "2025" },
+        { word: "Фейк", meaning: "Ложная информация, подделка.", example: "«Это новость — полный фейк»", translation: "ложь, подделка", comment: "Одно из самых частых слов 2025 года.", category: "Соцсети", source: "LiveDune / RTVI", date: "2025" },
+        { word: "Нейронка", meaning: "Разговорное название нейросети.", example: "«Я попросил нейронку написать текст»", translation: "нейросеть", comment: "Русифицированный IT-термин.", category: "Русский сленг", source: "LiveDune / RTVI", date: "2025" },
+        { word: "Санчас", meaning: "Полное игнорирование бывшего партнера после расставания.", example: "«Он объявил ей санчас»", translation: "полный игнор", comment: "Слово с форумов.", category: "Русский сленг", source: "Комсомольская правда", date: "2025" },
+        { word: "Тильт", meaning: "Состояние сильной эмоциональной нестабильности, злости.", example: "«Я в тильте после экзамена»", translation: "упадок, злость", comment: "Из игровой культуры.", category: "Эмоции / оценка", source: "Союз журналистов Москвы", date: "2025" },
+        { word: "Краш", meaning: "Человек, который очень нравится, объект симпатии.", example: "«Он мой краш»", translation: "возлюбленный", comment: "Классика зумерского сленга.", category: "Русский сленг", source: "Brand Analytics", date: "2024" },
+        { word: "Вайб", meaning: "Атмосфера, настроение, ощущение от чего-либо.", example: "«У этого места классный вайб»", translation: "атмосфера", comment: "Слово года 2024 по «Грамоте.ру».", category: "Русский сленг", source: "Грамота.ру", date: "2024" },
+        { word: "Чиназес", meaning: "Круто, отлично, выражение восторга.", example: "«Этот фильм — просто чиназес!»", translation: "круто, супер", comment: "Одно из самых обсуждаемых слов 2025 года.", category: "Мемы", source: "Комсомольская правда", date: "2025" },
+        { word: "Омежка", meaning: "Ироничное или пренебрежительное название человека, который не хочет брать на себя ответственность.", example: "«Он ведет себя как омежка»", translation: "слабак, ведомый", comment: "Из иерархии сигм и альф.", category: "Русский сленг", source: "Комсомольская правда", date: "2025" },
+        { word: "Агрессивный скибиди", meaning: "Что-то странное, пугающее или нелепое.", example: "«Это не танец, а какой-то агрессивный скибиди»", translation: "странный, пугающий", comment: "Слияние мема и описания.", category: "Мемы", source: "Соцсети", date: "2025" },
+        { word: "Риzz", meaning: "Очень крутой, вызывающий восхищение (особенно у девушек).", example: "«Он риzz»", translation: "обаятельный", comment: "Новое слово поколения Альфа.", category: "Англицизмы", source: "Oxford", date: "2025" },
+        { word: "Шаркша", meaning: "Умный, образованный человек (с иронией или уважением).", example: "«Он настоящий шаркша»", translation: "умник", comment: "Из словаря молодежи.", category: "Русский сленг", source: "Brand Analytics", date: "2025" },
+        { word: "Пуш", meaning: "Усилие, продвижение, стремление к цели.", example: "«Мне нужен этот пуш»", translation: "толчок, усилие", comment: "От английского push.", category: "Англицизмы", source: "РИАМО", date: "2026" },
+        { word: "Пруф", meaning: "Доказательство, подтверждение.", example: "«Кинь пруф»", translation: "доказательство", comment: "Классический интернет-сленг.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Булли", meaning: "Травля, агрессивное давление.", example: "«Он устроил булли в чате»", translation: "травля", comment: "От английского bullying.", category: "Соцсети", source: "Соцсети", date: "2025" },
+        { word: "Альтушка", meaning: "Девушка с необычным стилем (яркие волосы, пирсинг).", example: "«Она выглядит как альтушка»", translation: "неформалка", comment: "От «альтернатива».", category: "Русский сленг", source: "Соцсети", date: "2024" },
+        { word: "Флекс", meaning: "Хвастовство, демонстрация успеха.", example: "«Устроил флекс новыми кроссовками»", translation: "хвастовство", comment: "От английского flex.", category: "Англицизмы", source: "Интернет-сленг", date: "2025" },
+        { word: "Шипперить", meaning: "Представлять кого-то в романтических отношениях.", example: "«Я шипперю этих персонажей»", translation: "сводить", comment: "От английского ship.", category: "Англицизмы", source: "Фандомы", date: "2024" },
+        { word: "Рофл", meaning: "Шутка, что-то очень смешное.", example: "«Это рофл, не обижайся»", translation: "смешно, шутка", comment: "От ROFL.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Жиза", meaning: "Что-то жизненное, знакомое.", example: "«Это жиза, у меня так же»", translation: "жизненно", comment: "От слова «жизнь».", category: "Русский сленг", source: "Соцсети", date: "2024" },
+
+        // --- 50 НОВЫХ СЛОВ ---
+        { word: "Chud", meaning: "Оскорбление: неприятный, грубый или глупый человек.", example: "«Он ведет себя как chud»", translation: "мерзкий тип", comment: "Поколение Альфа.", category: "Англицизмы", source: "Euronews", date: "2026" },
+        { word: "Cap", meaning: "Ложь, преувеличение или выдумка.", example: "«Это кэп»", translation: "вранье", comment: "No cap = без вранья.", category: "Англицизмы", source: "Euronews", date: "2026" },
+        { word: "Crash out", meaning: "Эмоциональный срыв, потеря контроля.", example: "«Он крашнулся после экзамена»", translation: "сорваться", comment: "Поколение Альфа.", category: "Эмоции / оценка", source: "Euronews", date: "2026" },
+        { word: "Bop", meaning: "Хорошая песня (или уничижительное о девушке).", example: "«Этот трек — bop»", translation: "хит", comment: "Контекст важен.", category: "Англицизмы", source: "Euronews", date: "2026" },
+        { word: "Larping", meaning: "Создавать фальшивый образ, притворяться кем-то.", example: "«Хватит ларпить»", translation: "притворяться", comment: "От LARP.", category: "Англицизмы", source: "Euronews", date: "2026" },
+        { word: "Сигма", meaning: "Успешный, независимый мужчина (с иронией).", example: "«Он настоящий сигма»", translation: "одиночка", comment: "Интернет-культура.", category: "Мемы", source: "Курская правда", date: "2026" },
+        { word: "Лабубоман", meaning: "Коллекционер игрушек Labubu.", example: "«Он настоящий лабубоман»", translation: "коллекционер", comment: "Неологизм 2025.", category: "Неологизмы 2025", source: "Кубань 24", date: "2025" },
+        { word: "Кофе-рейв", meaning: "Дневная вечеринка без алкоголя с кофе.", example: "«Пойдем на кофе-рейв»", translation: "дневная вечеринка", comment: "Здоровый образ жизни.", category: "Неологизмы 2025", source: "Кубань 24", date: "2025" },
+        { word: "Манки-брэнчинг", meaning: "Поиск партнера, находясь в отношениях.", example: "«Это манки-брэнчинг»", translation: "поиск запасного", comment: "Метафора обезьяны.", category: "Неологизмы 2025", source: "Лента.ру", date: "2025" },
+        { word: "Гиблификация", meaning: "Обработка фото в стиле студии Ghibli.", example: "«Гиблификация соцсетей»", translation: "стиль Гибли", comment: "Тренд 2025.", category: "Неологизмы 2025", source: "Кубань 24", date: "2025" },
+        { word: "Бумераскер", meaning: "Тот, кто задает вопрос и сам на него отвечает.", example: "«Он бумераскер»", translation: "эгоцентрик", comment: "От бумеранг + ask.", category: "Неологизмы 2025", source: "Лента.ру", date: "2025" },
+        { word: "Бедроттинг", meaning: "Терапевтическая лень в кровати.", example: "«У меня бедроттинг»", translation: "лень", comment: "От bed + rotting.", category: "Неологизмы 2025", source: "Лента.ру", date: "2025" },
+        { word: "Банковский абьюзер", meaning: "Тот, кто гоняет деньги по вкладам.", example: "«Он банковский абьюзер»", translation: "охотник за ставками", comment: "Экономика 2025.", category: "Неологизмы 2025", source: "Парламентская газета", date: "2025" },
+        { word: "Капучинщица", meaning: "Девушка, ходящая на свидания ради кофе.", example: "«Она капучинщица»", translation: "любительница халявы", comment: "Ироничный термин.", category: "Неологизмы 2025", source: "Парламентская газета", date: "2025" },
+        { word: "Дофаминовый", meaning: "Вызывающий радость.", example: "«Дофаминовый шоппинг»", translation: "радостный", comment: "Слово-финалист 2026.", category: "Эмоции / оценка", source: "URA.RU", date: "2026" },
+        { word: "Прайм-эра", meaning: "Лучший период жизни.", example: "«Моя прайм-эра»", translation: "расцвет", comment: "Слово-финалист 2026.", category: "Русский сленг", source: "URA.RU", date: "2026" },
+        { word: "Иишка", meaning: "Нейросеть.", example: "«Спроси у иишки»", translation: "нейросеть", comment: "Слово-финалист 2026.", category: "Русский сленг", source: "URA.RU", date: "2026" },
+        { word: "Нишевый", meaning: "Для узкого круга.", example: "«Нишевый фильм»", translation: "для избранных", comment: "Слово-финалист 2026.", category: "Русский сленг", source: "URA.RU", date: "2026" },
+        { word: "Генерить", meaning: "Создавать с помощью ИИ.", example: "«Я генерю картинки»", translation: "создавать", comment: "Связано с ИИ.", category: "Русский сленг", source: "URA.RU", date: "2026" },
+        { word: "Вайб-программирование", meaning: "Кодинг с помощью ИИ.", example: "«Он вайб-программист»", translation: "кодить с ИИ", comment: "Неологизм 2025.", category: "Неологизмы 2025", source: "Парламентская газета", date: "2025" },
+        { word: "Чатгейт", meaning: "Скандал из-за утечки переписки.", example: "«Разразился чатгейт»", translation: "скандал с чатом", comment: "По аналогии с Уотергейтом.", category: "Неологизмы 2025", source: "Кубань 24", date: "2025" },
+        { word: "Байкшеринг", meaning: "Аренда велосипедов.", example: "«Пользуюсь байкшерингом»", translation: "аренда велосипедов", comment: "Транспортный термин.", category: "Неологизмы 2025", source: "Кубань 24", date: "2025" },
+        { word: "Инфлейшеншип", meaning: "Отношения ради выгоды.", example: "«Это инфлейшеншип»", translation: "отношения ради денег", comment: "От inflation + relationship.", category: "Неологизмы 2025", source: "Кубань 24", date: "2025" },
+        { word: "База", meaning: "Правда, истина.", example: "«Это база»", translation: "правда", comment: "Классика.", category: "Молодёжные словечки", source: "Соцсети", date: "2024" },
+        { word: "Айсик", meaning: "Чувство отторжения.", example: "«У меня айсик»", translation: "отторжение", comment: "От ick.", category: "Эмоции / оценка", source: "Соцсети", date: "2024" },
+        { word: "Мейн-карактер", meaning: "Главный герой.", example: "«Она мейн-карактер»", translation: "главный герой", comment: "От main character.", category: "Соцсети", source: "TikTok-тренды", date: "2024" },
+        { word: "Абьюзер", meaning: "Тиран.", example: "«Он абьюзер»", translation: "тиран", comment: "Психология.", category: "Эмоции / оценка", source: "Психология", date: "2024" },
+        { word: "Крипово", meaning: "Жутко.", example: "«Криповое видео»", translation: "жутко", comment: "От creepy.", category: "Эмоции / оценка", source: "Соцсети", date: "2024" },
+        { word: "Муд", meaning: "Настроение.", example: "«Мой муд»", translation: "настроение", comment: "От mood.", category: "Эмоции / оценка", source: "Соцсети", date: "2024" },
+        { word: "Соус", meaning: "Харизма.", example: "«У него есть соус»", translation: "харизма", comment: "Синоним сваги.", category: "Молодёжные словечки", source: "Соцсети", date: "2024" },
+        { word: "Агро", meaning: "Агрессия.", example: "«Не лови агро»", translation: "злость", comment: "От aggro.", category: "Эмоции / оценка", source: "Соцсети", date: "2024" },
+        { word: "ФОМО", meaning: "Страх упустить.", example: "«У меня ФОМО»", translation: "страх упустить", comment: "От FOMO.", category: "Эмоции / оценка", source: "Психология", date: "2024" },
+        { word: "NPC", meaning: "Шаблонный человек.", example: "«Он NPC»", translation: "шаблонный", comment: "Из игр.", category: "Игровой сленг", source: "Игровая культура", date: "2024" },
+        { word: "Го", meaning: "Пошли, давай.", example: "«Го в кино»", translation: "пошли", comment: "От go.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Изи", meaning: "Легко.", example: "«Это изи»", translation: "легко", comment: "От easy.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Чел", meaning: "Парень, человек.", example: "«Этот чел странный»", translation: "человек", comment: "От «человек».", category: "Молодёжные словечки", source: "Соцсети", date: "2024" },
+        { word: "Бро", meaning: "Друг.", example: "«Бро, ты где?»", translation: "друг", comment: "От brother.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Сорян", meaning: "Извини.", example: "«Сорян, я опоздал»", translation: "извини", comment: "От sorry.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Хз", meaning: "Не знаю.", example: "«Хз, что будет»", translation: "не знаю", comment: "Сокращение.", category: "Молодёжные словечки", source: "Интернет-сленг", date: "2024" },
+        { word: "Пон", meaning: "Понял.", example: "«Пон, спасибо»", translation: "понял", comment: "Сокращение.", category: "Молодёжные словечки", source: "Интернет-сленг", date: "2024" },
+        { word: "Кек", meaning: "Смешно.", example: "«Он упал — кек»", translation: "смешно", comment: "Из игр.", category: "Игровой сленг", source: "Интернет-сленг", date: "2024" },
+        { word: "Топ", meaning: "Лучшее.", example: "«Этот фильм — топ»", translation: "лучшее", comment: "От top.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Бомбить", meaning: "Злиться.", example: "«Меня бомбит»", translation: "злиться", comment: "От «бомба».", category: "Эмоции / оценка", source: "Соцсети", date: "2024" },
+        { word: "Ор", meaning: "Громко смеяться.", example: "«Я ор»", translation: "хохочу", comment: "От «орать».", category: "Эмоции / оценка", source: "Соцсети", date: "2024" },
+        { word: "Слэй", meaning: "Выглядеть потрясающе.", example: "«Ты слэй»", translation: "потрясающе", comment: "От slay.", category: "Англицизмы", source: "TikTok-тренды", date: "2024" },
+        { word: "Ред-флаг", meaning: "Признак опасности.", example: "«Это ред-флаг»", translation: "тревожный признак", comment: "От red flag.", category: "Эмоции / оценка", source: "Соцсети", date: "2024" },
+        { word: "Выгорание", meaning: "Истощение.", example: "«У меня выгорание»", translation: "усталость", comment: "Расширило значение.", category: "Эмоции / оценка", source: "Психология", date: "2024" },
+        { word: "Гостинг", meaning: "Исчезновение из общения.", example: "«Он меня сгостил»", translation: "исчезнуть", comment: "От ghosting.", category: "Соцсети", source: "LiveKuban", date: "2024" },
+        { word: "Крипжатина", meaning: "Очень стыдно.", example: "«Это крипжатина»", translation: "стыдно", comment: "Усиленная форма.", category: "Эмоции / оценка", source: "LiveKuban", date: "2024" },
+        { word: "Дед инсайд", meaning: "Апатия.", example: "«Я дед инсайд»", translation: "выгорел", comment: "Ирония.", category: "Эмоции / оценка", source: "LiveKuban", date: "2024" },
+        { word: "Афакаю", meaning: "Согласен.", example: "«Афакаю»", translation: "согласен", comment: "Из сленга.", category: "Молодёжные словечки", source: "LiveKuban", date: "2024" },
+        { word: "Нейминг", meaning: "Создание названий.", example: "«Удачный нейминг»", translation: "название", comment: "Бизнес-сленг.", category: "Русский сленг", source: "Соцсети", date: "2024" },
+        { word: "Пранк", meaning: "Розыгрыш.", example: "«Это был пранк»", translation: "розыгрыш", comment: "От prank.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Скам", meaning: "Мошенничество.", example: "«Это скам»", translation: "обман", comment: "От scam.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Хайп", meaning: "Ажиотаж.", example: "«Вокруг него хайп»", translation: "ажиотаж", comment: "От hype.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Краудфандинг", meaning: "Сбор денег.", example: "«Запустили краудфандинг»", translation: "сбор средств", comment: "От crowdfunding.", category: "Англицизмы", source: "Интернет-сленг", date: "2024" },
+        { word: "Бенч", meaning: "Скамейка.", example: "«Сидим на бенче»", translation: "скамейка", comment: "От bench.", category: "Англицизмы", source: "Соцсети", date: "2024" },
+        { word: "Воркать", meaning: "Работать.", example: "«Я воркаю»", translation: "работать", comment: "От work.", category: "Англицизмы", source: "Соцсети", date: "2024" },
+        { word: "Мимикрировать", meaning: "Подстраиваться.", example: "«Он мимикрирует»", translation: "подстраиваться", comment: "Биологический термин.", category: "Русский сленг", source: "Соцсети", date: "2024" }
+    ];
+
+    // --- ЛОГИКА САЙТА ---
+    const grid = document.getElementById('dictionaryGrid');
+    const searchInput = document.getElementById('searchInput');
+    const filters = document.getElementById('filters');
+    const modalOverlay = document.getElementById('modalOverlay');
+    
+    let currentCategory = 'all';
+    let currentSearch = '';
+
+    function renderCards() {
+        let filtered = dictionary;
+        if (currentCategory !== 'all') filtered = filtered.filter(item => item.category === currentCategory);
+        if (currentSearch.trim()) {
+            const q = currentSearch.toLowerCase().trim();
+            filtered = filtered.filter(item => item.word.toLowerCase().includes(q) || item.meaning.toLowerCase().includes(q));
+        }
+
+        grid.innerHTML = filtered.map(item => `
+            <div class="card" data-word="${item.word}">
+                <div class="word">${item.word}</div>
+                <div class="translation">${item.translation}</div>
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -6;
+                const rotateY = ((x - centerX) / centerX) * 6;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+            });
+
+            card.addEventListener('click', () => {
+                const word = card.dataset.word;
+                const item = dictionary.find(d => d.word === word);
+                openModal(item);
+            });
+        });
+    }
+
+    function openModal(item) {
+        document.getElementById('modalWord').textContent = item.word;
+        document.getElementById('modalMeaning').textContent = item.meaning;
+        document.getElementById('modalExample').textContent = item.example;
+        document.getElementById('modalTranslation').textContent = item.translation;
+        document.getElementById('modalComment').textContent = item.comment;
+        document.getElementById('modalSource').textContent = `Источник: ${item.source} · ${item.date}`;
+        modalOverlay.classList.add('active');
+    }
+
+    document.getElementById('modalClose').addEventListener('click', () => modalOverlay.classList.remove('active'));
+    modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.classList.remove('active'); });
+
+    searchInput.addEventListener('input', (e) => { currentSearch = e.target.value; renderCards(); });
+    filters.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('filter-btn')) return;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentCategory = e.target.dataset.category;
+        renderCards();
+    });
+
+    // Эффект печатной машинки
+    const textToType = "Мост или Стена?";
+    const typedText = document.getElementById('typedText');
+    let i = 0;
+    function typeWriter() {
+        if (i < textToType.length) {
+            typedText.textContent += textToType.charAt(i);
+            i++;
+            setTimeout(typeWriter, 150);
+        }
+    }
+    setTimeout(typeWriter, 1000);
+
+    // СЛОВО ДНЯ
+    let wordOfDayData = dictionary[Math.floor(Math.random() * dictionary.length)];
+    document.getElementById('wordOfDay').textContent = wordOfDayData.word;
+
+    // КВИЗ
+    function checkAnswer(qId, isCorrect) {
+        const qBlock = document.getElementById(qId);
+        const buttons = qBlock.querySelectorAll('.quiz-btn');
+        const resultText = qBlock.querySelector('.quiz-result-text');
+        
+        buttons.forEach(b => b.disabled = true);
+        
+        if (isCorrect) {
+            resultText.textContent = "✅ Верно!";
+            resultText.style.color = "var(--accent-2)";
+        } else {
+            resultText.textContent = "❌ Не угадал. Загляни в словарь!";
+            resultText.style.color = "var(--accent-1)";
+        }
+        resultText.classList.add('show');
+    }
+
+    // АНИМАЦИЯ ПРИ СКРОЛЛЕ
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 100;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    reveal();
+
+    // КНОПКА НАВЕРХ
+    const backToTopBtn = document.getElementById("backToTop");
+    window.onscroll = function() {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            backToTopBtn.style.display = "flex";
+        } else {
+            backToTopBtn.style.display = "none";
+        }
+    };
+    backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    renderCards();
+</script>
+</body>
+</html>
