@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Сленг поколения Z — словарь-переводчик</title>
     
     <!-- Подключение шрифтов Google Fonts -->
@@ -41,6 +41,7 @@
             font-family: 'Roboto', 'Segoe UI', sans-serif;
             background-color: var(--bg); color: var(--text);
             line-height: 1.6; overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Анимированный фон */
@@ -62,15 +63,15 @@
 
         /* Кнопка наверх */
         #backToTop {
-            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px;
             background: var(--accent-1); color: white; border: none; border-radius: 50%;
-            font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 15px rgba(232, 112, 92, 0.4);
+            font-size: 1.3rem; cursor: pointer; box-shadow: 0 5px 15px rgba(232, 112, 92, 0.4);
             display: none; z-index: 999; transition: 0.3s; align-items: center; justify-content: center;
         }
         #backToTop:hover { transform: translateY(-5px); background: var(--accent-2); }
 
         /* НАВИГАЦИЯ (Топбар) */
-        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; margin-bottom: 20px; background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; box-shadow: var(--card-shadow); position: sticky; top: 20px; z-index: 100; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; margin-bottom: 20px; background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; box-shadow: var(--card-shadow); position: sticky; top: 10px; z-index: 100; }
         .logo { font-size: 1.4rem; font-weight: 900; color: var(--heading); letter-spacing: 2px; }
         .nav-links { display: flex; gap: 20px; }
         .nav-links a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem; transition: 0.3s; }
@@ -114,8 +115,9 @@
         .search-box input { width: 100%; padding: 16px 25px; font-size: 1.05rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; color: var(--heading); backdrop-filter: blur(10px); transition: all 0.3s; outline: none; box-shadow: var(--card-shadow); }
         .search-box input::placeholder { color: var(--muted); }
         .search-box input:focus { border-color: var(--accent-1); box-shadow: 0 0 20px rgba(232, 112, 92, 0.2); }
+        
         .filters { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        .filter-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--muted); padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); font-size: 0.9rem; box-shadow: var(--card-shadow); }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--muted); padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); font-size: 0.9rem; box-shadow: var(--card-shadow); white-space: nowrap; }
         .filter-btn:hover, .filter-btn.active { background: var(--accent-2); border-color: var(--accent-2); color: var(--bg); font-weight: 700; }
 
         /* Сетка карточек */
@@ -139,27 +141,25 @@
         .bw-card h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--heading); display: flex; align-items: center; gap: 10px; }
         .bw-card p { font-size: 1rem; color: var(--text); }
 
-        /* Сравнение поколений */
+        /* Сравнение поколений (Горизонтальный скролл на мобильных) */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 40px; border-radius: 20px; }
         .generations-table {
-            width: 100%; border-collapse: collapse; background: var(--card-bg);
-            border-radius: 20px; overflow: hidden; backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 40px;
+            width: 100%; min-width: 600px; border-collapse: collapse; background: var(--card-bg);
+            backdrop-filter: blur(10px); border: 1px solid var(--card-border); box-shadow: var(--card-shadow);
         }
-        .generations-table th, .generations-table td {
-            padding: 15px 20px; text-align: left; border-bottom: 1px solid var(--card-border);
-        }
+        .generations-table th, .generations-table td { padding: 15px 20px; text-align: left; border-bottom: 1px solid var(--card-border); }
         .generations-table th { background: rgba(255,255,255,0.05); color: var(--heading); font-family: 'Montserrat'; font-weight: 800; }
         .generations-table td { color: var(--text); font-size: 0.95rem; }
         .generations-table tr:last-child td { border-bottom: none; }
         .generations-table .highlight { color: var(--accent-2); font-weight: 700; }
 
-        /* Мини-квиз (ОБНОВЛЕННЫЙ) */
+        /* Мини-квиз */
         .mini-quiz { background: var(--card-bg); border-radius: 20px; padding: 30px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 40px; }
         .quiz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .quiz-q { margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .quiz-q p { font-weight: 600; margin-bottom: 10px; color: var(--heading); font-size: 1rem; }
         .quiz-btns { display: flex; flex-direction: column; gap: 8px; }
-        .quiz-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text); padding: 8px 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; text-align: left; }
+        .quiz-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text); padding: 10px 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; text-align: left; }
         .quiz-btn:hover { border-color: var(--accent-3); background: rgba(255,255,255,0.1); }
         .quiz-btn.correct { background: var(--accent-2); color: var(--bg); border-color: var(--accent-2); font-weight: bold; }
         .quiz-btn.wrong { background: var(--accent-1); color: white; border-color: var(--accent-1); }
@@ -177,8 +177,8 @@
         .stat-fill.older { background: var(--accent-1); }
 
         /* Встроенная Google Forms */
-        .quiz-container { background: var(--card-bg); backdrop-filter: blur(10px); padding: 20px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); overflow: hidden; }
-        .quiz-container iframe { border-radius: 12px; background: white; display: block; }
+        .quiz-container { background: var(--card-bg); backdrop-filter: blur(10px); padding: 15px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); overflow: hidden; }
+        .quiz-container iframe { border-radius: 12px; background: white; display: block; width: 100%; }
 
         /* Источники */
         .sources-block { background: var(--card-bg); backdrop-filter: blur(10px); padding: 35px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
@@ -193,45 +193,85 @@
         /* Модальное окно (3D Анимация) */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); 
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); 
             z-index: 1000; justify-content: center; align-items: center; 
-            padding: 20px; opacity: 0; transition: opacity 0.3s ease; 
+            padding: 15px; opacity: 0; transition: opacity 0.3s ease; 
             perspective: 1200px;
         }
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal { 
             background: var(--modal-bg); border: 1px solid var(--card-border); 
-            border-radius: 24px; max-width: 600px; width: 100%; padding: 40px; 
+            border-radius: 24px; max-width: 600px; width: 100%; padding: 30px; 
             position: relative; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); 
             transform: rotateX(-20deg) translateY(50px) scale(0.9);
-            opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 90vh; overflow-y: auto;
         }
         .modal-overlay.active .modal { 
             transform: rotateX(0deg) translateY(0) scale(1);
             opacity: 1;
         }
-        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--muted); font-size: 2rem; cursor: pointer; transition: 0.2s; line-height: 1; }
-        .modal-close:hover { color: var(--accent-1); transform: rotate(90deg); }
-        .modal .word { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: var(--heading); margin-bottom: 25px; font-weight: 900; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 1.5rem; cursor: pointer; transition: 0.2s; line-height: 1; z-index: 10; }
+        .modal-close:hover { color: var(--accent-1); transform: rotate(90deg); background: rgba(232, 112, 92, 0.2); }
+        .modal .word { font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--heading); margin-bottom: 20px; font-weight: 900; padding-right: 30px; }
         .field { margin-bottom: 20px; }
         .field-label { font-size: 0.8rem; color: var(--accent-2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: 800; }
-        .field-value { font-size: 1.05rem; color: var(--text); }
+        .field-value { font-size: 1rem; color: var(--text); }
         .modal .example-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border-left: 4px solid var(--accent-2); font-style: italic; }
         .modal .comment-box { background: rgba(232, 112, 92, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(232, 112, 92, 0.2); }
-        .source-meta { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--card-border); font-size: 0.85rem; color: var(--muted); text-align: right; }
+        .source-meta { margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--card-border); font-size: 0.85rem; color: var(--muted); text-align: right; }
 
-        /* Медиа-запросы */
+        /* ========================================= */
+        /* МОБИЛЬНАЯ АДАПТАЦИЯ (Телефоны и Планшеты) */
+        /* ========================================= */
         @media (max-width: 768px) {
-            .hero h2 { font-size: 2.2rem; }
-            .key-stats { grid-template-columns: 1fr; }
-            .dictionary-grid { grid-template-columns: 1fr 1fr; }
-            .bridge-wall { grid-template-columns: 1fr; }
-            .quiz-grid { grid-template-columns: 1fr; }
-            .modal { padding: 30px 20px; }
-            .nav-links { display: none; }
-            .generations-table th, .generations-table td { padding: 10px; font-size: 0.85rem; }
+            .container { padding: 10px; }
+            .topbar { padding: 10px 15px; top: 5px; justify-content: center; }
+            .nav-links { display: none; } /* Скрываем меню на мобильных */
+            .hero { padding: 40px 0 20px; }
+            .hero h2 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            
+            .key-stats { grid-template-columns: 1fr; gap: 10px; margin-bottom: 30px; }
+            .key-stat-card { padding: 15px; }
+            .key-stat-card h4 { font-size: 1.8rem; }
+            
+            /* Свайпаемые фильтры */
+            .filters { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
+            .filters::-webkit-scrollbar { display: none; }
+            .filter-btn { padding: 8px 15px; font-size: 0.85rem; }
+            
+            /* Карточки в 2 колонки */
+            .dictionary-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+            .card { padding: 15px 12px; }
+            .card .word { font-size: 1.1rem; }
+            .card .translation { font-size: 0.85rem; }
+
+            .bridge-wall { grid-template-columns: 1fr; gap: 15px; }
+            .bw-card { padding: 20px; }
+            
+            .quiz-grid { grid-template-columns: 1fr; gap: 15px; }
+            .mini-quiz { padding: 20px; }
+            
+            .survey-block { padding: 20px; }
+            .stat-label { font-size: 0.9rem; flex-direction: column; gap: 5px; }
+            
+            .sources-block { padding: 20px; }
+            
+            .section-title { font-size: 1.5rem; margin: 40px 0 20px; }
+            
+            .modal { padding: 25px 20px; max-height: 95vh; }
+            .modal .word { font-size: 1.6rem; }
+            .field-value { font-size: 0.95rem; }
+            
+            .word-of-day { padding: 20px; margin-bottom: 30px; }
+            .word-of-day .big-word { font-size: 2rem; }
+            .marquee-container { margin-bottom: 30px; }
         }
-        @media (max-width: 480px) { .dictionary-grid { grid-template-columns: 1fr; } }
+
+        @media (max-width: 400px) {
+            .dictionary-grid { grid-template-columns: 1fr; } /* На самых узких экранах 1 колонка */
+        }
     </style>
 </head>
 <body>
@@ -299,7 +339,7 @@
     <!-- Управление словарем -->
     <section class="controls reveal" id="dictionary">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 Введите слово или значение для поиска...">
+            <input type="text" id="searchInput" placeholder="🔍 Поиск по слову или значению...">
         </div>
         <div class="filters" id="filters">
             <button class="filter-btn active" data-category="all">Все</button>
@@ -319,56 +359,58 @@
 
     <!-- СРАВНЕНИЕ ПОКОЛЕНИЙ -->
     <h2 class="section-title reveal" id="compare">⏳ Сравнение поколений</h2>
-    <table class="generations-table reveal">
-        <thead>
-            <tr>
-                <th>Смысл</th>
-                <th>2000-е (Миллениалы)</th>
-                <th>2010-е (Поколение Z)</th>
-                <th>2020-е (Зумеры / Альфа)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Круто, отлично</td>
-                <td>Клёво, зашибись</td>
-                <td>Топ, огонь</td>
-                <td class="highlight">Имба, чиназес, rizz</td>
-            </tr>
-            <tr>
-                <td>Смешно</td>
-                <td>Ржака, угар</td>
-                <td>Лол, рофл</td>
-                <td class="highlight">Ор, кек</td>
-            </tr>
-            <tr>
-                <td>Стыдно, неловко</td>
-                <td>Стыдоба</td>
-                <td>Кринж</td>
-                <td class="highlight">Крипжатина</td>
-            </tr>
-            <tr>
-                <td>Хвастаться</td>
-                <td>Понтоваться</td>
-                <td>Выпендриваться</td>
-                <td class="highlight">Флексить, могнуть</td>
-            </tr>
-            <tr>
-                <td>Человек, который много обещает</td>
-                <td>Пустозвон</td>
-                <td>Болтун</td>
-                <td class="highlight">Воздухан</td>
-            </tr>
-            <tr>
-                <td>Ложь</td>
-                <td>Гон, брехня</td>
-                <td>Фейк</td>
-                <td class="highlight">Cap (кэп)</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive reveal">
+        <table class="generations-table">
+            <thead>
+                <tr>
+                    <th>Смысл</th>
+                    <th>2000-е (Миллениалы)</th>
+                    <th>2010-е (Поколение Z)</th>
+                    <th>2020-е (Зумеры / Альфа)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Круто, отлично</td>
+                    <td>Клёво, зашибись</td>
+                    <td>Топ, огонь</td>
+                    <td class="highlight">Имба, чиназес, rizz</td>
+                </tr>
+                <tr>
+                    <td>Смешно</td>
+                    <td>Ржака, угар</td>
+                    <td>Лол, рофл</td>
+                    <td class="highlight">Ор, кек</td>
+                </tr>
+                <tr>
+                    <td>Стыдно, неловко</td>
+                    <td>Стыдоба</td>
+                    <td>Кринж</td>
+                    <td class="highlight">Крипжатина</td>
+                </tr>
+                <tr>
+                    <td>Хвастаться</td>
+                    <td>Понтоваться</td>
+                    <td>Выпендриваться</td>
+                    <td class="highlight">Флексить, могнуть</td>
+                </tr>
+                <tr>
+                    <td>Человек, который много обещает</td>
+                    <td>Пустозвон</td>
+                    <td>Болтун</td>
+                    <td class="highlight">Воздухан</td>
+                </tr>
+                <tr>
+                    <td>Ложь</td>
+                    <td>Гон, брехня</td>
+                    <td>Фейк</td>
+                    <td class="highlight">Cap (кэп)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <!-- ТЕСТ (ПРОВЕРЬ СЕБЯ) - 10 ВОПРОСОВ -->
+    <!-- ТЕСТ (ПРОВЕРЬ СЕБЯ) -->
     <h2 class="section-title reveal" id="test">🧠 Проверь себя</h2>
     <div class="mini-quiz reveal">
         <div class="quiz-grid">
@@ -479,15 +521,15 @@
     <h2 class="section-title reveal" id="stats">📊 Данные исследования</h2>
     <section class="survey-block reveal">
         
-        <div style="text-align: center; margin-bottom: 30px;">
-            <p style="font-size: 1rem; color: var(--text); max-width: 700px; margin: 0 auto; font-weight: 500;">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <p style="font-size: 0.9rem; color: var(--text); max-width: 700px; margin: 0 auto; font-weight: 500;">
                 Показатели основаны на данных <strong>Brand Analytics</strong> (анализ 90+ млн публикаций) и всероссийском опросе <strong>«Дзен» (Inc. Russia, Lenta.ru, Gazeta.ru)</strong>.
             </p>
         </div>
 
         <div class="stat-row">
             <div class="stat-label">
-                <span>14–25 лет (Активно используют) <a href="https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml" target="_blank" style="text-decoration: none; font-size: 0.8rem; color: var(--bg); background: var(--accent-2); padding: 3px 8px; border-radius: 10px; margin-left: 8px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>14–25 лет (Активно используют) <a href="https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--bg); background: var(--accent-2); padding: 2px 6px; border-radius: 10px;" title="Смотреть источник">Источник 🔗</a></span> 
                 <span>82%</span>
             </div>
             <div class="stat-bar"><div class="stat-fill young" style="width: 82%;"></div></div>
@@ -495,7 +537,7 @@
 
         <div class="stat-row">
             <div class="stat-label">
-                <span>26–35 лет (Знают и используют) <a href="https://lenta.ru/news/2024/09/18/nazvan-samyy-razdrazhayuschiy-millenialov-i-zumerov-sleng/" target="_blank" style="text-decoration: none; font-size: 0.8rem; color: var(--bg); background: var(--accent-3); padding: 3px 8px; border-radius: 10px; margin-left: 8px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>26–35 лет (Знают и используют) <a href="https://lenta.ru/news/2024/09/18/nazvan-samyy-razdrazhayuschiy-millenialov-i-zumerov-sleng/" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--bg); background: var(--accent-3); padding: 2px 6px; border-radius: 10px;" title="Смотреть источник">Источник 🔗</a></span> 
                 <span>31%</span>
             </div>
             <div class="stat-bar"><div class="stat-fill millennial" style="width: 31%;"></div></div>
@@ -503,13 +545,13 @@
         
         <div class="stat-row">
             <div class="stat-label">
-                <span>36–45 лет (Уверены в знании) <a href="https://incrussia.ru/news/kak-rossiyane-ponimayut-internet-sleng-i-kak-na-nem-razgovarivayut-v-zavisimosti-ot-vozrasta/" target="_blank" style="text-decoration: none; font-size: 0.8rem; color: var(--heading); background: var(--accent-1); padding: 3px 8px; border-radius: 10px; margin-left: 8px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>36–45 лет (Уверены в знании) <a href="https://incrussia.ru/news/kak-rossiyane-ponimayut-internet-sleng-i-kak-na-nem-razgovarivayut-v-zavisimosti-ot-vozrasta/" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--heading); background: var(--accent-1); padding: 2px 6px; border-radius: 10px;" title="Смотреть источник">Источник 🔗</a></span> 
                 <span>3%</span>
             </div>
             <div class="stat-bar"><div class="stat-fill older" style="width: 3%;"></div></div>
         </div>
 
-        <p style="font-size: 1.1rem; color: var(--heading); font-weight: 800; margin-top: 30px; text-align: center;">
+        <p style="font-size: 1rem; color: var(--heading); font-weight: 800; margin-top: 20px; text-align: center;">
             Итог: чем старше поколение, тем выше «стена» непонимания. Словарь-переводчик помогает ее разрушить.
         </p>
     </section>
@@ -519,8 +561,7 @@
     <section class="quiz-container reveal">
         <iframe 
             src="https://docs.google.com/forms/d/e/1FAIpQLSdqfLZEitZu2fH-Ep-IS1Ptr_XNWGk2OLR_v6QN4KyCCgDxbQ/viewform?embedded=true" 
-            width="100%" 
-            height="900" 
+            height="800" 
             frameborder="0" 
             marginheight="0" 
             marginwidth="0">
@@ -731,20 +772,23 @@
         `).join('');
 
         document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -6;
-                const rotateY = ((x - centerX) / centerX) * 6;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
-            });
+            // На мобильных отключаем 3D наклон для лучшей производительности и UX
+            if (window.innerWidth > 768) {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -6;
+                    const rotateY = ((x - centerX) / centerX) * 6;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+                });
+            }
 
             card.addEventListener('click', () => {
                 const word = card.dataset.word;
@@ -762,10 +806,19 @@
         document.getElementById('modalComment').textContent = item.comment;
         document.getElementById('modalSource').textContent = `Источник: ${item.source} · ${item.date}`;
         modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Блокируем скролл фона
     }
 
-    document.getElementById('modalClose').addEventListener('click', () => modalOverlay.classList.remove('active'));
-    modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.classList.remove('active'); });
+    document.getElementById('modalClose').addEventListener('click', () => {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = ''; // Возвращаем скролл
+    });
+    modalOverlay.addEventListener('click', (e) => { 
+        if (e.target === modalOverlay) {
+            modalOverlay.classList.remove('active'); 
+            document.body.style.overflow = '';
+        }
+    });
 
     searchInput.addEventListener('input', (e) => { currentSearch = e.target.value; renderCards(); });
     filters.addEventListener('click', (e) => {
