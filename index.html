@@ -38,7 +38,7 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--accent-1); }
 
         body {
-            font-family: 'Inter', 'Segoe UI', sans-serif; /* Новый шрифт */
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             background-color: var(--bg); color: var(--text);
             line-height: 1.6; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
@@ -172,7 +172,7 @@
         .quiz-result-text { display: none; margin-top: 8px; font-weight: bold; font-size: 0.85rem; }
         .quiz-result-text.show { display: block; }
 
-        /* Статистика (ИСПРАВЛЕНО ДЛЯ МОБИЛЬНЫХ) */
+        /* Статистика */
         .survey-block { background: var(--card-bg); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid var(--card-border); margin-bottom: 30px; box-shadow: var(--card-shadow); }
         .stat-row { margin-bottom: 25px; }
         .stat-label { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; font-weight: 600; color: var(--heading); gap: 10px; }
@@ -188,11 +188,25 @@
         .quiz-container { background: var(--card-bg); backdrop-filter: blur(10px); padding: 15px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); overflow: hidden; }
         .quiz-container iframe { border-radius: 12px; background: white; display: block; width: 100%; }
 
-        /* Источники (ИСПРАВЛЕНО) */
+        /* Источники (ОБНОВЛЕНО) */
         .sources-block { background: var(--card-bg); backdrop-filter: blur(10px); padding: 35px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
+        
+        .source-category { margin-bottom: 30px; }
+        .source-category:last-child { margin-bottom: 0; }
+        
+        .source-category h3 { 
+            font-size: 1.15rem; 
+            color: var(--accent-2); 
+            margin-bottom: 15px; 
+            font-family: 'Montserrat', sans-serif; 
+            border-bottom: 1px solid var(--card-border); 
+            padding-bottom: 8px;
+            font-weight: 800;
+        }
+        
         .sources-list { padding-left: 20px; }
-        .sources-list li { margin-bottom: 15px; font-size: 0.95rem; color: var(--text); }
-        .sources-list a { color: var(--accent-3); text-decoration: none; border-bottom: 1px dashed var(--accent-1); transition: 0.2s; font-weight: 500; white-space: nowrap; display: inline-block; }
+        .sources-list li { margin-bottom: 10px; font-size: 0.95rem; color: var(--text); }
+        .sources-list a { color: var(--accent-3); text-decoration: none; border-bottom: 1px dashed var(--accent-1); transition: 0.2s; font-weight: 500; display: inline-block; }
         .sources-list a:hover { color: var(--accent-1); border-bottom-style: solid; }
 
         /* Футер */
@@ -229,9 +243,7 @@
         .modal .comment-box { background: rgba(232, 112, 92, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(232, 112, 92, 0.2); }
         .source-meta { margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--card-border); font-size: 0.85rem; color: var(--muted); text-align: right; }
 
-        /* ========================================= */
-        /* МОБИЛЬНАЯ АДАПТАЦИЯ (Телефоны и Планшеты) */
-        /* ========================================= */
+        /* Мобильная адаптация */
         @media (max-width: 768px) {
             .container { padding: 10px; }
             .topbar { padding: 10px 15px; top: 5px; justify-content: center; }
@@ -259,13 +271,13 @@
             .quiz-grid { grid-template-columns: 1fr; gap: 15px; }
             .mini-quiz { padding: 20px; }
             
-            /* Мобильные фиксы для статистики */
             .survey-block { padding: 20px; }
             .stat-label { flex-direction: column; align-items: flex-start; gap: 5px; }
             .stat-label span:last-child { font-size: 1.1rem; align-self: flex-end; }
             
             .sources-block { padding: 20px; }
-            .sources-list a { white-space: normal; } /* Позволяем ссылкам переноситься на мобильных */
+            .sources-list a { white-space: normal; }
+            .source-category h3 { font-size: 1rem; }
             
             .section-title { font-size: 1.5rem; margin: 40px 0 20px; }
             
@@ -580,31 +592,48 @@
         </iframe>
     </section>
 
-    <!-- Источники -->
+    <!-- Источники (ОБНОВЛЕНО) -->
     <h2 class="section-title reveal" id="sources">📚 Источники</h2>
     <section class="sources-block reveal">
-        <ol class="sources-list">
-            <li>Brand Analytics. Словарь сленга 2025. — <a href="https://brandanalytics.ru/blog/brand-analytics-slang-mem" target="_blank">Ссылка</a></li>
-            <li>Inc. Russia: Как россияне понимают интернет-сленг (2024). — <a href="https://incrussia.ru/news/kak-rossiyane-ponimayut-internet-sleng-i-kak-na-nem-razgovarivayut-v-zavisimosti-ot-vozrasta/" target="_blank">Ссылка</a></li>
-            <li>Lenta.ru: Самый раздражающий сленг (2024). — <a href="https://lenta.ru/news/2024/09/18/nazvan-samyy-razdrazhayuschiy-millenialov-i-zumerov-sleng/" target="_blank">Ссылка</a></li>
-            <li>Gazeta.ru: Аналитики выяснили, какие неологизмы чаще всего используют россияне (2024). — <a href="https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml" target="_blank">Ссылка</a></li>
-            <li>РИАМО: От «нейрослопа» до «фарма ауры»: полный гид по новому зумерскому сленгу (2026). — <a href="https://riamo.ru/articles/shpargalki/ot-nejroslopa-do-farma-aury-polnyj-gid-po-novomu-zumerskomu-slengu/" target="_blank">Ссылка</a></li>
-            <li>НТВ: «Дофаминовый», «иишка» и «воздухан» претендуют на звание «Слово года — 2026». — <a href="https://www.ntv.ru/novosti/3020254" target="_blank">Ссылка</a></li>
-            <li>Медиалогия: Имба, окак, Лабубу вошли в топ-5 слов 2025 года. — <a href="https://www.mn.ru/short/imba-okak-labubu-voshli-v-top-5-slov-2025-goda-po-versii-medialogii" target="_blank">Ссылка</a></li>
-            <li>LiveDune / RTVI: Названы самые популярные сленговые слова 2025 года. — <a href="https://rtvi.com/news/nazvany-samye-populyarnye-slengovye-slova-2025-goda/" target="_blank">Ссылка</a></li>
-            <li>Комсомольская правда: Что значит «чиназес», «омежка» и «санчас»? (2025). — <a href="https://www.kp.ru/daily/27654/5012345/" target="_blank">Ссылка</a></li>
-            <li>Тинькофф Журнал: Скуф, чиназес и краш: как понять поколение Z (2025). — <a href="https://journal.tinkoff.ru/slang/" target="_blank">Ссылка</a></li>
-            <li>Euronews: От «chud» до «bop»: самые популярные в Google сленговые слова поколения Альфа 2026 года. — <a href="https://ru.euronews.com/2026/09/28/from-chud-to-bop-most-searched-gen-alpha-slang-terms-of-2026-so-far-revealed" target="_blank">Ссылка</a></li>
-            <li>Парламентская газета: Ученые описали 90 новых слов, появившихся в русском языке в 2025 году. — <a href="https://www.pnp.ru/culture/uchenye-vyyavili-90-novykh-slov-poyavivshikhsya-v-russkom-yazyke-v-2025-godu.html" target="_blank">Ссылка</a></li>
-            <li>Кубань 24: «Лабубомания», «кофе-рейв» и еще 88 слов появились в русском языке в 2025 году. — <a href="https://kuban24.tv/item/labubomaniya-kofe-rejv-i-eshhe-88-slov-poyavilis-v-russkom-yazyke-v-2025-godu" target="_blank">Ссылка</a></li>
-            <li>URA.RU: Дофаминовый воздухан в прайме — это «ред-флаг»: россияне выбирают слово года 2026. — <a href="https://ura.news/articles/1053141920" target="_blank">Ссылка</a></li>
-            <li>Слова года по версиям ведущих словарей: 
-                <a href="https://blog.collinsdictionary.com/language-lovers/collins-word-of-the-year-2026-a-year-of-being-outdone/" target="_blank">Collins Dictionary (2026)</a>, 
-                <a href="https://www.bbc.com/news/articles/cewjxqvqzgyo" target="_blank">Oxford University Press (2025)</a>.
-            </li>
-            <li>5-tv.ru: «Мусор или величайшее достижение»: США назвали слово 2025 года (2026). — <a href="https://www.5-tv.ru/news/5051173/musor-ili-velicajsee-dostizenie-vssa-nazvali-slovo-2025-goda/" target="_blank">Ссылка</a></li>
-            <li>Справочный портал «Грамота.ру» (материалы о неологизмах). — <a href="https://gramota.ru/" target="_blank">Ссылка</a></li>
-        </ol>
+        
+        <!-- Категория 1 -->
+        <div class="source-category">
+            <h3>1. Официальные словари и лингвистические порталы</h3>
+            <ol class="sources-list">
+                <li>Грамота.ру : справочно-информационный портал [Электронный ресурс]. — URL: <a href="https://gramota.ru/" target="_blank">https://gramota.ru/</a></li>
+                <li>Collins Dictionary : официальный блог. Word of the Year 2026: mogging [Электронный ресурс]. — URL: <a href="https://blog.collinsdictionary.com/language-lovers/collins-word-of-the-year-2026-a-year-of-being-outdone/" target="_blank">https://blog.collinsdictionary.com/.../collins-word-of-the-year-2026/</a></li>
+                <li>Oxford University Press : официальный сайт. The Oxford Word of the Year 2025 is rage bait [Электронный ресурс]. — URL: <a href="https://www.bbc.com/news/articles/cewjxqvqzgyo" target="_blank">https://www.bbc.com/news/articles/cewjxqvqzgyo</a></li>
+            </ol>
+        </div>
+
+        <!-- Категория 2 -->
+        <div class="source-category">
+            <h3>2. Аналитические отчеты и исследования</h3>
+            <ol class="sources-list">
+                <li>Brand Analytics : платформа анализа соцмедиа. Словарь сленга 2025 [Электронный ресурс]. — URL: <a href="https://brandanalytics.ru/blog/brand-analytics-slang-mem" target="_blank">https://brandanalytics.ru/blog/brand-analytics-slang-mem</a></li>
+                <li>LiveDune : сервис аналитики. Названы самые популярные сленговые слова 2025 года (публикация RTVI) [Электронный ресурс]. — URL: <a href="https://rtvi.com/news/nazvany-samye-populyarnye-slengovye-slova-2025-goda/" target="_blank">https://rtvi.com/news/nazvany-samye-populyarnye-slengovye-slova-2025-goda/</a></li>
+                <li>Медиалогия : компания-разработчик системы мониторинга СМИ. Имба, окак, Лабубу вошли в топ-5 слов 2025 года [Электронный ресурс]. — URL: <a href="https://www.mn.ru/short/imba-okak-labubu-voshli-v-top-5-slov-2025-goda-po-versii-medialogii" target="_blank">https://www.mn.ru/short/imba-okak-labubu-voshli-v-top-5-slov-2025-goda-po-versii-medialogii</a></li>
+            </ol>
+        </div>
+
+        <!-- Категория 3 -->
+        <div class="source-category">
+            <h3>3. Электронные СМИ и новостные порталы</h3>
+            <ol class="sources-list">
+                <li>Inc. Russia : интернет-издание об инновациях. Как россияне понимают интернет-сленг и как на нем разговаривают в зависимости от возраста (2024) [Электронный ресурс]. — URL: <a href="https://incrussia.ru/news/kak-rossiyane-ponimayut-internet-sleng-i-kak-na-nem-razgovarivayut-v-zavisimosti-ot-vozrasta/" target="_blank">https://incrussia.ru/news/...</a></li>
+                <li>Lenta.ru : электронное периодическое издание. Найден самый раздражающий миллениалов и зумеров сленг (2024) [Электронный ресурс]. — URL: <a href="https://lenta.ru/news/2024/09/18/nazvan-samyy-razdrazhayuschiy-millenialov-i-zumerov-sleng/" target="_blank">https://lenta.ru/news/2024/09/18/...</a></li>
+                <li>Gazeta.ru : общественно-политическое интернет-издание. Аналитики выяснили, какие неологизмы чаще всего используют россияне (2024) [Электронный ресурс]. — URL: <a href="https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml" target="_blank">https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml</a></li>
+                <li>РИАМО : региональное информационное агентство. От «нейрослопа» до «фарма ауры»: полный гид по новому зумерскому сленгу (2026) [Электронный ресурс]. — URL: <a href="https://riamo.ru/articles/shpargalki/ot-nejroslopa-do-farma-aury-polnyj-gid-po-novomu-zumerskomu-slengu/" target="_blank">https://riamo.ru/articles/shpargalki/...</a></li>
+                <li>НТВ : телекомпания. «Дофаминовый», «иишка» и «воздухан» претендуют на звание «Слово года — 2026» [Электронный ресурс]. — URL: <a href="https://www.ntv.ru/novosti/3020254" target="_blank">https://www.ntv.ru/novosti/3020254</a></li>
+                <li>Комсомольская правда : газета. Что значит «чиназес», «омежка» и «санчас»? (2025) [Электронный ресурс]. — URL: <a href="https://www.kp.ru/daily/27654/5012345/" target="_blank">https://www.kp.ru/daily/27654/5012345/</a></li>
+                <li>Тинькофф Журнал : онлайн-журнал. Скуф, чиназес и краш: как понять поколение Z (2025) [Электронный ресурс]. — URL: <a href="https://journal.tinkoff.ru/slang/" target="_blank">https://journal.tinkoff.ru/slang/</a></li>
+                <li>Euronews : международный новостной канал. От «chud» до «bop»: самые популярные в Google сленговые слова поколения Альфа 2026 года [Электронный ресурс]. — URL: <a href="https://ru.euronews.com/2026/09/28/from-chud-to-bop-most-searched-gen-alpha-slang-terms-of-2026-so-far-revealed" target="_blank">https://ru.euronews.com/2026/09/28/...</a></li>
+                <li>Парламентская газета : издание Федерального Собрания РФ. Ученые описали 90 новых слов, появившихся в русском языке в 2025 году [Электронный ресурс]. — URL: <a href="https://www.pnp.ru/culture/uchenye-vyyavili-90-novykh-slov-poyavivshikhsya-v-russkom-yazyke-v-2025-godu.html" target="_blank">https://www.pnp.ru/culture/...</a></li>
+                <li>Кубань 24 : краевое информационное агентство. «Лабубомания», «кофе-рейв» и еще 88 слов появились в русском языке в 2025 году [Электронный ресурс]. — URL: <a href="https://kuban24.tv/item/labubomaniya-kofe-rejv-i-eshhe-88-slov-poyavilis-v-russkom-yazyke-v-2025-godu" target="_blank">https://kuban24.tv/item/...</a></li>
+                <li>URA.RU : российское информационное агентство. Дофаминовый воздухан в прайме — это «ред-флаг»: россияне выбирают слово года 2026 [Электронный ресурс]. — URL: <a href="https://ura.news/articles/1053141920" target="_blank">https://ura.news/articles/1053141920</a></li>
+                <li>5-tv.ru : телеканал. «Мусор или величайшее достижение»: США назвали слово 2025 года (2026) [Электронный ресурс]. — URL: <a href="https://www.5-tv.ru/news/5051173/musor-ili-velicajsee-dostizenie-vssa-nazvali-slovo-2025-goda/" target="_blank">https://www.5-tv.ru/news/...</a></li>
+            </ol>
+        </div>
     </section>
 
     <!-- Футер -->
