@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Сленг поколения Z — словарь-переводчик</title>
     
-    <!-- Подключение шрифтов Google Fonts -->
+    <!-- Подключение современных шрифтов: Inter (текст) и Montserrat (заголовки) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
 
     <style>
         /* ОЧЕНЬ ТЕМНАЯ И ГЛУБОКАЯ ЦВЕТОВАЯ ПАЛИТРА (Dark Mocha) */
@@ -38,7 +38,7 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--accent-1); }
 
         body {
-            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif; /* Новый шрифт */
             background-color: var(--bg); color: var(--text);
             line-height: 1.6; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
@@ -79,7 +79,7 @@
 
         /* Главный экран */
         .hero { text-align: center; padding: 60px 0 40px; }
-        .badge { display: inline-block; padding: 6px 16px; border-radius: 30px; background: rgba(124, 191, 156, 0.1); color: var(--accent-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(124, 191, 156, 0.2); }
+        .badge { display: inline-block; padding: 6px 16px; border-radius: 30px; background: rgba(124, 191, 156, 0.1); color: var(--accent-2); font-weight: 600; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(124, 191, 156, 0.2); }
         .hero h2 { font-size: 3.2rem; margin-bottom: 15px; color: var(--heading); font-weight: 900; line-height: 1.2; }
         .typed-text { color: var(--accent-1); border-right: 4px solid var(--accent-1); padding-right: 8px; animation: blink 0.8s infinite; }
         @keyframes blink { 50% { border-color: transparent; } }
@@ -112,13 +112,13 @@
 
         /* Поиск и фильтры */
         .controls { margin-bottom: 35px; display: flex; flex-direction: column; gap: 15px; }
-        .search-box input { width: 100%; padding: 16px 25px; font-size: 1.05rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; color: var(--heading); backdrop-filter: blur(10px); transition: all 0.3s; outline: none; box-shadow: var(--card-shadow); }
+        .search-box input { width: 100%; padding: 16px 25px; font-size: 1.05rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; color: var(--heading); backdrop-filter: blur(10px); transition: all 0.3s; outline: none; box-shadow: var(--card-shadow); font-family: 'Inter', sans-serif; }
         .search-box input::placeholder { color: var(--muted); }
         .search-box input:focus { border-color: var(--accent-1); box-shadow: 0 0 20px rgba(232, 112, 92, 0.2); }
         
         .filters { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        .filter-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--muted); padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); font-size: 0.9rem; box-shadow: var(--card-shadow); white-space: nowrap; }
-        .filter-btn:hover, .filter-btn.active { background: var(--accent-2); border-color: var(--accent-2); color: var(--bg); font-weight: 700; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--muted); padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); font-size: 0.9rem; box-shadow: var(--card-shadow); white-space: nowrap; font-family: 'Inter', sans-serif; }
+        .filter-btn:hover, .filter-btn.active { background: var(--accent-2); border-color: var(--accent-2); color: var(--bg); font-weight: 600; }
 
         /* Сетка карточек */
         .dictionary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 80px; perspective: 1000px; }
@@ -141,11 +141,17 @@
         .bw-card h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--heading); display: flex; align-items: center; gap: 10px; }
         .bw-card p { font-size: 1rem; color: var(--text); }
 
-        /* Сравнение поколений (Горизонтальный скролл на мобильных) */
-        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 40px; border-radius: 20px; }
+        /* Сравнение поколений (Горизонтальный скролл) */
+        .table-wrapper { position: relative; margin-bottom: 40px; }
+        .table-wrapper::after {
+            content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 30px;
+            background: linear-gradient(to right, transparent, var(--bg));
+            pointer-events: none; border-radius: 0 20px 20px 0;
+        }
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
         .generations-table {
-            width: 100%; min-width: 600px; border-collapse: collapse; background: var(--card-bg);
-            backdrop-filter: blur(10px); border: 1px solid var(--card-border); box-shadow: var(--card-shadow);
+            width: 100%; min-width: 650px; border-collapse: collapse; background: var(--card-bg);
+            backdrop-filter: blur(10px);
         }
         .generations-table th, .generations-table td { padding: 15px 20px; text-align: left; border-bottom: 1px solid var(--card-border); }
         .generations-table th { background: rgba(255,255,255,0.05); color: var(--heading); font-family: 'Montserrat'; font-weight: 800; }
@@ -159,17 +165,19 @@
         .quiz-q { margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .quiz-q p { font-weight: 600; margin-bottom: 10px; color: var(--heading); font-size: 1rem; }
         .quiz-btns { display: flex; flex-direction: column; gap: 8px; }
-        .quiz-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text); padding: 10px 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; text-align: left; }
+        .quiz-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text); padding: 10px 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; text-align: left; font-family: 'Inter', sans-serif; }
         .quiz-btn:hover { border-color: var(--accent-3); background: rgba(255,255,255,0.1); }
         .quiz-btn.correct { background: var(--accent-2); color: var(--bg); border-color: var(--accent-2); font-weight: bold; }
         .quiz-btn.wrong { background: var(--accent-1); color: white; border-color: var(--accent-1); }
         .quiz-result-text { display: none; margin-top: 8px; font-weight: bold; font-size: 0.85rem; }
         .quiz-result-text.show { display: block; }
 
-        /* Статистика */
+        /* Статистика (ИСПРАВЛЕНО ДЛЯ МОБИЛЬНЫХ) */
         .survey-block { background: var(--card-bg); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid var(--card-border); margin-bottom: 30px; box-shadow: var(--card-shadow); }
         .stat-row { margin-bottom: 25px; }
-        .stat-label { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; color: var(--heading); }
+        .stat-label { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; font-weight: 600; color: var(--heading); gap: 10px; }
+        .stat-label span:first-child { flex: 1; }
+        .stat-label span:last-child { font-size: 1.2rem; font-weight: 800; color: var(--accent-2); }
         .stat-bar { height: 18px; background: rgba(0,0,0,0.4); border-radius: 10px; overflow: hidden; }
         .stat-fill { height: 100%; border-radius: 10px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .stat-fill.young { background: var(--accent-2); }
@@ -180,11 +188,11 @@
         .quiz-container { background: var(--card-bg); backdrop-filter: blur(10px); padding: 15px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); overflow: hidden; }
         .quiz-container iframe { border-radius: 12px; background: white; display: block; width: 100%; }
 
-        /* Источники */
+        /* Источники (ИСПРАВЛЕНО) */
         .sources-block { background: var(--card-bg); backdrop-filter: blur(10px); padding: 35px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
         .sources-list { padding-left: 20px; }
         .sources-list li { margin-bottom: 15px; font-size: 0.95rem; color: var(--text); }
-        .sources-list a { color: var(--accent-3); text-decoration: none; border-bottom: 1px dashed var(--accent-1); transition: 0.2s; font-weight: 500; }
+        .sources-list a { color: var(--accent-3); text-decoration: none; border-bottom: 1px dashed var(--accent-1); transition: 0.2s; font-weight: 500; white-space: nowrap; display: inline-block; }
         .sources-list a:hover { color: var(--accent-1); border-bottom-style: solid; }
 
         /* Футер */
@@ -227,7 +235,7 @@
         @media (max-width: 768px) {
             .container { padding: 10px; }
             .topbar { padding: 10px 15px; top: 5px; justify-content: center; }
-            .nav-links { display: none; } /* Скрываем меню на мобильных */
+            .nav-links { display: none; }
             .hero { padding: 40px 0 20px; }
             .hero h2 { font-size: 2rem; }
             .hero p { font-size: 1rem; }
@@ -236,12 +244,10 @@
             .key-stat-card { padding: 15px; }
             .key-stat-card h4 { font-size: 1.8rem; }
             
-            /* Свайпаемые фильтры */
             .filters { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
             .filters::-webkit-scrollbar { display: none; }
             .filter-btn { padding: 8px 15px; font-size: 0.85rem; }
             
-            /* Карточки в 2 колонки */
             .dictionary-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
             .card { padding: 15px 12px; }
             .card .word { font-size: 1.1rem; }
@@ -253,10 +259,13 @@
             .quiz-grid { grid-template-columns: 1fr; gap: 15px; }
             .mini-quiz { padding: 20px; }
             
+            /* Мобильные фиксы для статистики */
             .survey-block { padding: 20px; }
-            .stat-label { font-size: 0.9rem; flex-direction: column; gap: 5px; }
+            .stat-label { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .stat-label span:last-child { font-size: 1.1rem; align-self: flex-end; }
             
             .sources-block { padding: 20px; }
+            .sources-list a { white-space: normal; } /* Позволяем ссылкам переноситься на мобильных */
             
             .section-title { font-size: 1.5rem; margin: 40px 0 20px; }
             
@@ -270,7 +279,7 @@
         }
 
         @media (max-width: 400px) {
-            .dictionary-grid { grid-template-columns: 1fr; } /* На самых узких экранах 1 колонка */
+            .dictionary-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -359,55 +368,57 @@
 
     <!-- СРАВНЕНИЕ ПОКОЛЕНИЙ -->
     <h2 class="section-title reveal" id="compare">⏳ Сравнение поколений</h2>
-    <div class="table-responsive reveal">
-        <table class="generations-table">
-            <thead>
-                <tr>
-                    <th>Смысл</th>
-                    <th>2000-е (Миллениалы)</th>
-                    <th>2010-е (Поколение Z)</th>
-                    <th>2020-е (Зумеры / Альфа)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Круто, отлично</td>
-                    <td>Клёво, зашибись</td>
-                    <td>Топ, огонь</td>
-                    <td class="highlight">Имба, чиназес, rizz</td>
-                </tr>
-                <tr>
-                    <td>Смешно</td>
-                    <td>Ржака, угар</td>
-                    <td>Лол, рофл</td>
-                    <td class="highlight">Ор, кек</td>
-                </tr>
-                <tr>
-                    <td>Стыдно, неловко</td>
-                    <td>Стыдоба</td>
-                    <td>Кринж</td>
-                    <td class="highlight">Крипжатина</td>
-                </tr>
-                <tr>
-                    <td>Хвастаться</td>
-                    <td>Понтоваться</td>
-                    <td>Выпендриваться</td>
-                    <td class="highlight">Флексить, могнуть</td>
-                </tr>
-                <tr>
-                    <td>Человек, который много обещает</td>
-                    <td>Пустозвон</td>
-                    <td>Болтун</td>
-                    <td class="highlight">Воздухан</td>
-                </tr>
-                <tr>
-                    <td>Ложь</td>
-                    <td>Гон, брехня</td>
-                    <td>Фейк</td>
-                    <td class="highlight">Cap (кэп)</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="table-wrapper reveal">
+        <div class="table-responsive">
+            <table class="generations-table">
+                <thead>
+                    <tr>
+                        <th>Смысл</th>
+                        <th>2000-е (Миллениалы)</th>
+                        <th>2010-е (Поколение Z)</th>
+                        <th>2020-е (Зумеры / Альфа)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Круто, отлично</td>
+                        <td>Клёво, зашибись</td>
+                        <td>Топ, огонь</td>
+                        <td class="highlight">Имба, чиназес, rizz</td>
+                    </tr>
+                    <tr>
+                        <td>Смешно</td>
+                        <td>Ржака, угар</td>
+                        <td>Лол, рофл</td>
+                        <td class="highlight">Ор, кек</td>
+                    </tr>
+                    <tr>
+                        <td>Стыдно, неловко</td>
+                        <td>Стыдоба</td>
+                        <td>Кринж</td>
+                        <td class="highlight">Крипжатина</td>
+                    </tr>
+                    <tr>
+                        <td>Хвастаться</td>
+                        <td>Понтоваться</td>
+                        <td>Выпендриваться</td>
+                        <td class="highlight">Флексить, могнуть</td>
+                    </tr>
+                    <tr>
+                        <td>Человек, который много обещает</td>
+                        <td>Пустозвон</td>
+                        <td>Болтун</td>
+                        <td class="highlight">Воздухан</td>
+                    </tr>
+                    <tr>
+                        <td>Ложь</td>
+                        <td>Гон, брехня</td>
+                        <td>Фейк</td>
+                        <td class="highlight">Cap (кэп)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- ТЕСТ (ПРОВЕРЬ СЕБЯ) -->
@@ -529,7 +540,7 @@
 
         <div class="stat-row">
             <div class="stat-label">
-                <span>14–25 лет (Активно используют) <a href="https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--bg); background: var(--accent-2); padding: 2px 6px; border-radius: 10px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>14–25 лет (Активно используют) <a href="https://www.gazeta.ru/social/news/2024/10/17/24170017.shtml" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--bg); background: var(--accent-2); padding: 2px 6px; border-radius: 10px; white-space: nowrap;" title="Смотреть источник">Источник 🔗</a></span> 
                 <span>82%</span>
             </div>
             <div class="stat-bar"><div class="stat-fill young" style="width: 82%;"></div></div>
@@ -537,7 +548,7 @@
 
         <div class="stat-row">
             <div class="stat-label">
-                <span>26–35 лет (Знают и используют) <a href="https://lenta.ru/news/2024/09/18/nazvan-samyy-razdrazhayuschiy-millenialov-i-zumerov-sleng/" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--bg); background: var(--accent-3); padding: 2px 6px; border-radius: 10px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>26–35 лет (Знают и используют) <a href="https://lenta.ru/news/2024/09/18/nazvan-samyy-razdrazhayuschiy-millenialov-i-zumerov-sleng/" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--bg); background: var(--accent-3); padding: 2px 6px; border-radius: 10px; white-space: nowrap;" title="Смотреть источник">Источник 🔗</a></span> 
                 <span>31%</span>
             </div>
             <div class="stat-bar"><div class="stat-fill millennial" style="width: 31%;"></div></div>
@@ -545,7 +556,7 @@
         
         <div class="stat-row">
             <div class="stat-label">
-                <span>36–45 лет (Уверены в знании) <a href="https://incrussia.ru/news/kak-rossiyane-ponimayut-internet-sleng-i-kak-na-nem-razgovarivayut-v-zavisimosti-ot-vozrasta/" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--heading); background: var(--accent-1); padding: 2px 6px; border-radius: 10px;" title="Смотреть источник">Источник 🔗</a></span> 
+                <span>36–45 лет (Уверены в знании) <a href="https://incrussia.ru/news/kak-rossiyane-ponimayut-internet-sleng-i-kak-na-nem-razgovarivayut-v-zavisimosti-ot-vozrasta/" target="_blank" style="text-decoration: none; font-size: 0.75rem; color: var(--heading); background: var(--accent-1); padding: 2px 6px; border-radius: 10px; white-space: nowrap;" title="Смотреть источник">Источник 🔗</a></span> 
                 <span>3%</span>
             </div>
             <div class="stat-bar"><div class="stat-fill older" style="width: 3%;"></div></div>
@@ -772,7 +783,6 @@
         `).join('');
 
         document.querySelectorAll('.card').forEach(card => {
-            // На мобильных отключаем 3D наклон для лучшей производительности и UX
             if (window.innerWidth > 768) {
                 card.addEventListener('mousemove', e => {
                     const rect = card.getBoundingClientRect();
@@ -806,12 +816,12 @@
         document.getElementById('modalComment').textContent = item.comment;
         document.getElementById('modalSource').textContent = `Источник: ${item.source} · ${item.date}`;
         modalOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Блокируем скролл фона
+        document.body.style.overflow = 'hidden'; 
     }
 
     document.getElementById('modalClose').addEventListener('click', () => {
         modalOverlay.classList.remove('active');
-        document.body.style.overflow = ''; // Возвращаем скролл
+        document.body.style.overflow = ''; 
     });
     modalOverlay.addEventListener('click', (e) => { 
         if (e.target === modalOverlay) {
